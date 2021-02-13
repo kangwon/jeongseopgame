@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class EpisodePanelController : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class EpisodePanelController : MonoBehaviour
 
     void OnClickOkButton()
     {
-
+        SceneManager.LoadScene("GameScene");
     }
     void OnClickCancelButton()
     {
