@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Debug=UnityEngine.Debug;
+using UnityEngine;
 
 [System.Serializable]
 class MultiLineText
@@ -38,4 +38,14 @@ class Episode
     public string startPageId;
 
     public Page startPage { get => pages[startPageId]; }
+
+    public static Episode Load(string id)
+    {
+        TextAsset jsonFile = Resources.Load<TextAsset>($"Episodes/{id}");
+        if(jsonFile == null)
+            throw new ArgumentException($"There is no such episode; {id}");
+
+        Episode episode = JsonUtility.FromJson<Episode>(jsonFile.text);
+        return episode;
+    }
 }
