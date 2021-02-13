@@ -1289,7 +1289,6 @@ GameObject:
   - component: {fileID: 1843255414}
   - component: {fileID: 1843255416}
   - component: {fileID: 1843255415}
-  - component: {fileID: 1843255418}
   - component: {fileID: 1843255417}
   m_Layer: 5
   m_Name: EpisodePanel
@@ -1297,7 +1296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1843255414
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1367,18 +1366,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73b1800c5e4d67a4b983b65e1cc86c9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1843255418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1843255413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d398a2718b94e6a438ebf821a89652b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1865113809
