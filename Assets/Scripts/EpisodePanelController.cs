@@ -6,9 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class EpisodePanelController : MonoBehaviour
 {
+    public static Vector3 DisplayPosition = new Vector3(0, 0, 0);
+
     Button okButton;
     Button cancelButton;
     Text episodeText;
+
+    Episode episode;
 
     void Start()
     {
@@ -26,5 +30,14 @@ public class EpisodePanelController : MonoBehaviour
     void OnClickCancelButton()
     {
         this.gameObject.SetActive(false);
+    }
+
+    public void Display(Episode episode)
+    {
+        this.episodeText.text = episode.intro.ToString();
+        this.episode = episode;
+
+        this.gameObject.transform.localPosition = DisplayPosition;
+        this.gameObject.SetActive(true);
     }
 }

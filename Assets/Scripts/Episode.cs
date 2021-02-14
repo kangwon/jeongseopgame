@@ -5,14 +5,14 @@ using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
-class MultiLineText
+public class MultiLineText
 {
     public List<string> lines;
     public override string ToString() => String.Join("\n", lines);
 }
 
 [System.Serializable]
-class Action
+public class Action
 {
     public string title;
     public string linkedPageId;
@@ -20,7 +20,7 @@ class Action
 }
 
 [System.Serializable]
-class Page
+public class Page
 {
     public string id;
     public MultiLineText body;
@@ -29,7 +29,7 @@ class Page
 }
 
 [System.Serializable]
-class Episode
+public class Episode
 {
     public string id;
     public string title;
