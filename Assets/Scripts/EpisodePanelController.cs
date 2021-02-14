@@ -20,7 +20,7 @@ public class EpisodePanelController : MonoBehaviour
         okButton.onClick.AddListener(OnClickOkButton);
         cancelButton = GameObject.Find("Canvas/EpisodePanel/CancelButton").GetComponent<Button>();
         cancelButton.onClick.AddListener(OnClickCancelButton);
-        episodeText = GameObject.Find("Canvas/EpisodePanel/EpisodeText").GetComponent<Text>();
+        episodeText = GameObject.Find("EpisodeText").GetComponent<Text>();
     }
 
     void OnClickOkButton()
