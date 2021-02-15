@@ -6,19 +6,21 @@ using UnityEngine.SceneManagement;
 
 public class EpisodePanelController : MonoBehaviour
 {
-    GameObject episodePanel;
+    public static Vector3 DisplayPosition = new Vector3(0, 0, 0);
+
     Button okButton;
     Button cancelButton;
     Text episodeText;
-    // Start is called before the first frame update
+
+    Episode episode;
+
     void Start()
     {
-        episodePanel = GameObject.Find("Canvas").transform.Find("EpisodePanel").gameObject;
         okButton = GameObject.Find("Canvas/EpisodePanel/OkButton").GetComponent<Button>();
-        okButton.onClick.AddListener(()=> OnClickOkButton());
+        okButton.onClick.AddListener(OnClickOkButton);
         cancelButton = GameObject.Find("Canvas/EpisodePanel/CancelButton").GetComponent<Button>();
-        cancelButton.onClick.AddListener(()=>OnClickCancelButton());
-        episodeText = GameObject.Find("Canvas/EpisodePanel/EpisodeText").GetComponent<Text>();
+        cancelButton.onClick.AddListener(OnClickCancelButton);
+        episodeText = GameObject.Find("EpisodeText").GetComponent<Text>();
     }
 
     void OnClickOkButton()
@@ -27,12 +29,15 @@ public class EpisodePanelController : MonoBehaviour
     }
     void OnClickCancelButton()
     {
-        episodePanel.SetActive(false);
+        this.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Display(Episode episode)
     {
-        
+        this.episodeText.text = episode.intro.ToString();
+        this.episode = episode;
+
+        this.gameObject.transform.localPosition = DisplayPosition;
+        this.gameObject.SetActive(true);
     }
 }
