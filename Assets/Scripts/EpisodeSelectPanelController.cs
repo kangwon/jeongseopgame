@@ -9,7 +9,7 @@ public class EpisodeSelectPanelController : MonoBehaviour
     Button openPanelButton;
     Button[] episodeButton = new Button[3];
     GameObject episodeSelectPanel;
-    EpisodePanelController episodePanel;
+    IntroPanelController introPanel;
 
     Episode[] episodes;
 
@@ -21,7 +21,7 @@ public class EpisodeSelectPanelController : MonoBehaviour
         };
 
         episodeSelectPanel = GameObject.Find("Canvas").transform.Find("EpisodeSelectPanel").gameObject;
-        episodePanel = GameObject.Find("Canvas").transform.Find("EpisodePanel").gameObject.GetComponent<EpisodePanelController>();
+        introPanel = GameObject.Find("Canvas").transform.Find("IntroPanel").gameObject.GetComponent<IntroPanelController>();
         openPanelButton = GameObject.Find("Canvas/EpisodeSelectButton").GetComponent<Button>();
         openPanelButton.onClick.AddListener(OnClickEpisodeSelectButton);
         for (int i = 0; i < 3; i++)
@@ -39,6 +39,6 @@ public class EpisodeSelectPanelController : MonoBehaviour
     }
     void OnClickEpisodeButton(Episode episode)
     {
-        episodePanel.Display(episode);
+        introPanel.Display(episode);
     }
 }
