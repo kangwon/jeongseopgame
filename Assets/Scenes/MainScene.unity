@@ -906,7 +906,7 @@ GameObject:
   - component: {fileID: 469904301}
   - component: {fileID: 469904300}
   m_Layer: 5
-  m_Name: EpisodeText
+  m_Name: IntroText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1798,7 +1798,7 @@ GameObject:
   - component: {fileID: 1843255415}
   - component: {fileID: 1843255417}
   m_Layer: 5
-  m_Name: EpisodePanel
+  m_Name: IntroPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1872,7 +1872,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1843255413}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73b1800c5e4d67a4b983b65e1cc86c9d, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b78cb931ce5a4272b11920838f8282a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1865113809
