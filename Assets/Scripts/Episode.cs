@@ -34,6 +34,8 @@ public class Episode
     public string id;
     public string title;
     public MultiLineText intro;
+
+    public List<Page> pageList;
     public Dictionary<string, Page> pages;
     public string startPageId;
 
@@ -46,6 +48,9 @@ public class Episode
             throw new ArgumentException($"There is no such episode; {id}");
 
         Episode episode = JsonUtility.FromJson<Episode>(jsonFile.text);
+        episode.pages = new Dictionary<string, Page>();
+        foreach (Page page in episode.pageList)
+            episode.pages[page.id] = page;
         return episode;
     }
 }

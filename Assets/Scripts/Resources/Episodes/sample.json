@@ -14,9 +14,10 @@
     "1. 프로젝트 구성원의 개인 정보를 원함",
     "2. 프로젝트의 정보를 원함"
   ]},
-  "pages": {
-    "page1": {
-      "body": {"linse": [
+  "pageList": [
+    {
+      "id": "page1",
+      "body": {"lines": [
         ":: 정보력 테스트에요. 일단 간단한 것부터 물어봅시다. 우리 프로젝트 기획팀은 몇 명일까요?"
       ]},
       "actions": [
@@ -25,7 +26,8 @@
         {"title": "4명", "linkedPageId": "page2", "starChange": -1}
       ]
     },
-    "page2": {
+    {
+      "id": "page2",
       "body": {"lines": [
         ":: 흠, 이게 맞나요? 제가 알기론 아닌데 말이죠."
       ]},
@@ -33,7 +35,8 @@
         {"title": "다음 페이지로", "linkedPageId": "page3"}
       ]
     },
-    "page3": {
+    {
+      "id": "page3",
       "body": {"lines": [
         ":: 다음은 프로젝트 시작일입니다. 알고 계시리라 믿습니다."
       ]},
@@ -43,7 +46,8 @@
         {"title": "2020년 12월 28일", "linkedPageId": "page4", "starChange": -1}
       ]
     },
-    "page4": {
+    {
+      "id": "page4",
       "body": {"lines": [
         ":: 흠... 좀 많이 실망이네요."
       ]},
@@ -51,7 +55,8 @@
         {"title": "면목이 없습니다....", "linkedPageId": "page5"}
       ]
     },
-    "page5": {
+    {
+      "id": "page5",
       "body": {"lines": [
         ":: 좀 어렵게 가봅시다. 러브월드의 마스코트는 러비, 러블리입니다. 그렇다면 회복 NPC를 맡고 있는 동물은 무엇일까요?"
       ]},
@@ -61,7 +66,8 @@
         {"title": "곰", "linkedPageId": "page6", "starChange": -1}
       ]
     },
-    "page6": {
+    {
+      "id": "page6",
       "body": {"lines": [
         ":: 많이 어려웠나요...."
       ]},
@@ -69,7 +75,8 @@
         {"title": "스읍... 핳", "linkedPageId": "page7"}
       ]
     },
-    "page7": {
+    {
+      "id": "page7",
       "body": {"lines": [
         ":: 제가 알고 싶은 내용은 여기 까지입니다. 뭐, 간단하셨겠죠, 푸는데는."
       ]},
@@ -78,6 +85,6 @@
       ],
       "isEnd": true
     }
-  },
+  ],
   "startPageId": "page1"
 }
