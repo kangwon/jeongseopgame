@@ -12,12 +12,14 @@ public class EpisodePlayer
     private EpisodePlayer() {}
     public static EpisodePlayer Instance { get => instance; }
 
+    public static bool isReady { get => Instance.episode != null; }
+
+    public static Episode CurrentEpisode { get => Instance.episode; }
+    public static Page CurrentPage { get => Instance.currentPage; }
+
     public static void SetEpisode(Episode episode)
     {
         Instance.episode = episode;
         Instance.currentPage = episode.startPage;
     }
-
-    public static Episode GetCurrentEpisode() => Instance.episode;
-    public static Page GetCurrentPage() => Instance.currentPage;
 }

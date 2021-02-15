@@ -6,20 +6,25 @@ using UnityEngine.SceneManagement;
 
 public class StoryPanelController : MonoBehaviour
 {
+    Text storyText;
     Button backButton;
-    // Start is called before the first frame update
+    
     void Start()
     {
+        storyText = GameObject.Find("StoryText").GetComponent<Text>();
         backButton = GameObject.Find("Canvas/BackButton").GetComponent<Button>();
-        backButton.onClick.AddListener(() => OnClickBackButton());
+        backButton.onClick.AddListener(OnClickBackButton);
+        
+        if (EpisodePlayer.isReady)
+            UpdatePage(EpisodePlayer.CurrentPage);
     }
     void OnClickBackButton()
     {
         SceneManager.LoadScene("MainScene");
     }
-    // Update is called once per frame
-    void Update()
+
+    void UpdatePage(Page page)
     {
-        
+        storyText.text = page.body.ToString();
     }
 }
