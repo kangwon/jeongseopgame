@@ -23,7 +23,7 @@ public class StoryPanelController : MonoBehaviour
         SceneManager.LoadScene("MainScene");
     }
 
-    void OnPageUpdated(Page page)
+    public void OnPageUpdated(Page page)
     {
         storyText.text = page.body.ToString();
     }
