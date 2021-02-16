@@ -16,14 +16,14 @@ public class StoryPanelController : MonoBehaviour
         backButton.onClick.AddListener(OnClickBackButton);
         
         if (EpisodePlayer.isReady)
-            UpdatePage(EpisodePlayer.CurrentPage);
+            OnPageUpdated(EpisodePlayer.CurrentPage);
     }
     void OnClickBackButton()
     {
         SceneManager.LoadScene("MainScene");
     }
 
-    void UpdatePage(Page page)
+    void OnPageUpdated(Page page)
     {
         storyText.text = page.body.ToString();
     }
