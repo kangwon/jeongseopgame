@@ -179,7 +179,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: cc4213d1b3d45449086e4d809379aa24, type: 3}
-    m_FontSize: 16
+    m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -415,7 +415,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 1411637514}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
@@ -1894,6 +1894,27 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1411637514}
     m_Modifications:
+    - target: {fileID: 6100004834148362533, guid: 978f2204c5cfd47e29adb4dddfe054af,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6100004834148362535, guid: 978f2204c5cfd47e29adb4dddfe054af,
+        type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: cc4213d1b3d45449086e4d809379aa24,
+        type: 3}
+    - target: {fileID: 6100004834148362535, guid: 978f2204c5cfd47e29adb4dddfe054af,
+        type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6100004834148362535, guid: 978f2204c5cfd47e29adb4dddfe054af,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 18
+      objectReference: {fileID: 0}
     - target: {fileID: 6100004834779945358, guid: 978f2204c5cfd47e29adb4dddfe054af,
         type: 3}
       propertyPath: m_Name
