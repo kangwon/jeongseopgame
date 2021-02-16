@@ -21,24 +21,32 @@ public class SelectPanelController : MonoBehaviour
 
     public void OnPageUpdated(Page page)
     {
-        for (int i = 0; i < page.actions.Count; i++)
+        if (page.isEnd == true) //해당 페이지가 끝인 경우
         {
-            Action action = page.actions[i];
-            GameObject button = Instantiate(ButtonPrefab, ButtonHolder.transform);
-            buttonList.Add(button);
-            button.transform.GetComponentInChildren<Text>().text = action.title;
-            button.GetComponent<Button>().onClick.AddListener(()=> 
+            // TODO :결과창을 보여주는 코드
+            Debug.Log($"별의 갯수 :{EpisodePlayer.CurrentStar}");
+        }
+        else //페이지가 끝이 아닐 경우
+        {
+            for (int i = 0; i < page.actions.Count; i++)
             {
-                Debug.Log($"선택지 수: {buttonList.Count}");
-                while(buttonList.Count !=0)
+                Action action = page.actions[i];
+                GameObject button = Instantiate(ButtonPrefab, ButtonHolder.transform);
+                buttonList.Add(button);
+                button.transform.GetComponentInChildren<Text>().text = action.title;
+                button.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    Destroy(buttonList.ElementAt(0));
-                    buttonList.RemoveAt(0);
-                }
-                storyPanel.OnPageUpdated(EpisodePlayer.CurrentEpisode.pages[action.linkedPageId]);
-                OnPageUpdated(EpisodePlayer.CurrentEpisode.pages[action.linkedPageId]);
-                Debug.Log($"Selected: {action.title}");
-            });
+                    EpisodePlayer.StarChange(action.starChange);
+                    while (buttonList.Count != 0)
+                    {
+                        Destroy(buttonList.ElementAt(0));
+                        buttonList.RemoveAt(0);
+                    }
+                    storyPanel.OnPageUpdated(EpisodePlayer.CurrentEpisode.pages[action.linkedPageId]);
+                    OnPageUpdated(EpisodePlayer.CurrentEpisode.pages[action.linkedPageId]);
+                    Debug.Log($"Selected: {action.title}");
+                });
+            }
         }
     }
 }
