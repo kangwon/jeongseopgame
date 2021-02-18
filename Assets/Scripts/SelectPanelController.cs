@@ -8,6 +8,7 @@ public class SelectPanelController : MonoBehaviour
 {
     GameObject ButtonPrefab;
     GameObject ButtonHolder;
+    GameObject resultPanel;
     StoryPanelController storyPanel;
     List<GameObject> buttonList = new List<GameObject> { };
     void Start()
@@ -15,6 +16,7 @@ public class SelectPanelController : MonoBehaviour
         ButtonPrefab = Resources.Load<GameObject>("ActionButtonPrefab");
         ButtonHolder = GameObject.Find("ButtonHolder").gameObject;
         storyPanel = GameObject.Find("StoryPanel").GetComponent<StoryPanelController>();
+        resultPanel = GameObject.Find("Canvas").transform.Find("ResultPanel").gameObject;
         if (EpisodePlayer.isReady)
             OnPageUpdated(EpisodePlayer.CurrentPage);
     }
@@ -24,6 +26,7 @@ public class SelectPanelController : MonoBehaviour
         if (page.isEnd == true) //해당 페이지가 끝인 경우
         {
             // TODO :결과창을 보여주는 코드
+            resultPanel.SetActive(true);
             Debug.Log($"별의 갯수 :{EpisodePlayer.CurrentStar}");
         }
         else //페이지가 끝이 아닐 경우
