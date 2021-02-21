@@ -29,7 +29,7 @@ public class Page
 }
 
 [System.Serializable]
-public class Episode
+public class Episode : IEquatable<Episode>
 {
     public string id;
     public string title;
@@ -39,6 +39,13 @@ public class Episode
     public Dictionary<string, Page> pages;
     public string startPageId;
 
+    public bool Equals(Episode epi)
+    {
+        if (epi == null) return false;
+        return (epi.id == this.id);
+    }
+    public override bool Equals(object obj) => Equals(obj as Episode);
+    public override int GetHashCode() => (id).GetHashCode();
     public Page startPage { get => pages[startPageId]; }
 
     public static Episode Load(string id)

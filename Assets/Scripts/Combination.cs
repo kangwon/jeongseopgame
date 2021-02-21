@@ -23,20 +23,25 @@ public class Combination
     public void DoCombination(List<List<int>> data,int n,int r)
     {
         data.Clear();
-        if (r == 3)
+        switch (r)
         {
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = i + 1; j < n; j++)
+            case 3:
+                for (int i = 0; i < n; i++)
                 {
-                    for (int k = j + 1; k < n; k++)
+                    for (int j = i + 1; j < n; j++)
                     {
-                        List<int> temp = new List<int> { i, j, k };
-                        data.Add(temp);
+                        for (int k = j + 1; k < n; k++)
+                        {
+                            List<int> temp = new List<int> { i, j, k };
+                            data.Add(temp);
+                        }
                     }
                 }
-            }
+                break;
+            default:
+                throw new Exception("r must be 1,2 and 3");
         }
+
     }
 
     public void printCombination()
