@@ -25,6 +25,25 @@ public class Combination
         data.Clear();
         switch (r)
         {
+            case 0:
+                break;
+            case 1:
+                for (int i = 0; i < n; i++)
+                {
+                    List<int> temp = new List<int> { i };
+                    data.Add(temp);
+                }
+                break;
+            case 2:
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = i + 1; j < n; j++)
+                    {
+                        List<int> temp = new List<int> { i, j };
+                        data.Add(temp);
+                    }
+                }
+                break;
             case 3:
                 for (int i = 0; i < n; i++)
                 {
