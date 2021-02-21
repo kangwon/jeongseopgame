@@ -12,6 +12,7 @@ public class EpisodeSelectPanelController : MonoBehaviour
     IntroPanelController introPanel;
     Episode[] episodes;
     int maxSelect;
+    bool firstStart = true;
     void Start()
     {
         episodes = new Episode[3];
@@ -24,18 +25,37 @@ public class EpisodeSelectPanelController : MonoBehaviour
         introPanel = GameObject.Find("Canvas").transform.Find("IntroPanel").gameObject.GetComponent<IntroPanelController>();
         openPanelButton = GameObject.Find("Canvas/EpisodeSelectButton").GetComponent<Button>();
         openPanelButton.onClick.AddListener(OnClickEpisodeSelectButton);
-        for (int i = 0; i < maxSelect; i++)
+        for (int i = 0; i < 3; i++)
         {
-            var episode = episodes[i];
+          //  var episode = episodes[i];
             episodeButton[i] = GameObject.Find($"Canvas/EpisodeSelectPanel/Episode{i + 1}Button").GetComponent<Button>();
-            episodeButton[i].GetComponentInChildren<Text>().text = episode.title;
-            episodeButton[i].onClick.AddListener(() => OnClickEpisodeButton(episode));
+         //   episodeButton[i].GetComponentInChildren<Text>().text = episode.title;
+        //    episodeButton[i].onClick.AddListener(() => OnClickEpisodeButton(episode));
         }
         episodeSelectPanel.SetActive(false);
+        firstStart = false;
     }
     private void OnEnable()
     {
-        
+        if (!firstStart)
+        {
+            maxSelect = SelectTutorialEpisode();
+            for (int i = 0; i < 3; i++)
+            {
+                if (i > maxSelect-1) 
+                {
+                    episodeButton[i].GetComponentInChildren<Text>().text = "튜토리얼 에피소드 없음";
+                    episodeButton[i].onClick.RemoveAllListeners();
+                    episodeButton[i].onClick.AddListener(() => Debug.Log("모든 튜토리얼을 클리어 해주세요."));
+                }
+                else
+                {
+                    var episode = episodes[i];
+                    episodeButton[i].GetComponentInChildren<Text>().text = episode.title;
+                    episodeButton[i].onClick.AddListener(() => OnClickEpisodeButton(episode));
+                }
+            }
+        }
     }
     int SelectTutorialEpisode() //선택 가능한 에피소드의 수를 리턴 (최대 3)
     {
@@ -50,6 +70,7 @@ public class EpisodeSelectPanelController : MonoBehaviour
         if (episodeList.Count < 3)
             maxSelect = episodeList.Count;
         Combination c = new Combination(episodeList.Count, maxSelect); // nCr = n개(튜토리얼 에피소드의 수) 중 r개를 조합
+        if (c.data.Count == 0) return 0;
         int index = Random.Range(0, c.data.Count); //전체 조합중 하나를 랜덤으로 선택
         int k = 0;
         foreach (var episodeNum in c.data.ElementAt(index)) //선택한 조합 순서로 에피소드를 넣는다.
