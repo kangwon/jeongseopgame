@@ -15,11 +15,15 @@ public class EpisodeSelectPanelController : MonoBehaviour
 
     void Start()
     {
-        episodes = new Episode[3] 
+        episodes = new Episode[3];
+        Combination c = new Combination(EpisodeCollection.Instance.AllEpisode.Count, 3); // nC3 = n개(전체 에피소드의 수) 중 3개를 조합
+        int index = Random.Range(0, c.data.Count); //전체 조합중 하나를 랜덤으로 선택
+        int k = 0;
+        foreach (var episodeNum in c.data.ElementAt(index)) //선택한 조합 순서로 에피소드를 넣는다.
         {
-            Episode.Load("sample"), Episode.Load("sample"), Episode.Load("sample"),
-        };
-        EpisodeCollection.Instance.PrintEpisode(); // 테스트용 //나중에 지우기
+            episodes[k] =EpisodeCollection.Instance.EpisodeExceptTutorial.ElementAt(episodeNum);
+            k++;
+        }
         episodeSelectPanel = GameObject.Find("Canvas").transform.Find("EpisodeSelectPanel").gameObject;
         introPanel = GameObject.Find("Canvas").transform.Find("IntroPanel").gameObject.GetComponent<IntroPanelController>();
         openPanelButton = GameObject.Find("Canvas/EpisodeSelectButton").GetComponent<Button>();

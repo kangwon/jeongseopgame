@@ -39,5 +39,5 @@ public class EpisodeCollection
     }
     public List<Episode> EpisodeTutorial { get => tutorialEpisodes; }
     public List<Episode> EpisodeExceptTutorial { get => episodes.Except(tutorialEpisodes).ToList(); }
-
+    public List<Episode> AllEpisode { get => episodes; }
 }
