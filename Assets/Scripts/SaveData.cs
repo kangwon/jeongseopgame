@@ -22,6 +22,7 @@ public class SaveData
     Dictionary<string, checkEpisode> clearEpisodeList = new Dictionary<string, checkEpisode> { };
     private static readonly SaveData instance = new SaveData();
     public static SaveData Instance { get => instance; }
+    public List<string> ClearEpisodeList { get =>clearEpisodeList.Keys.ToList(); }
     public void Save()
     {
         var playerJson = new JSONObject();
