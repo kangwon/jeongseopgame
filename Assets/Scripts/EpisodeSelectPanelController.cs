@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
-
+using System.Linq;
 public class EpisodeSelectPanelController : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -19,7 +19,7 @@ public class EpisodeSelectPanelController : MonoBehaviour
         {
             Episode.Load("sample"), Episode.Load("sample"), Episode.Load("sample"),
         };
-
+        EpisodeCollection.Instance.PrintEpisode(); // 테스트용 //나중에 지우기
         episodeSelectPanel = GameObject.Find("Canvas").transform.Find("EpisodeSelectPanel").gameObject;
         introPanel = GameObject.Find("Canvas").transform.Find("IntroPanel").gameObject.GetComponent<IntroPanelController>();
         openPanelButton = GameObject.Find("Canvas/EpisodeSelectButton").GetComponent<Button>();
@@ -33,6 +33,15 @@ public class EpisodeSelectPanelController : MonoBehaviour
         }
         episodeSelectPanel.SetActive(false);
     }
+    List<Episode> RandomEpisodeSelect(int index)
+    {
+        var episodes = EpisodeCollection.Instance.EpisodeExceptTutorial;
+        var tempEpisodes = new List<Episode> { };
+        
+        tempEpisodes.Add(episodes.ElementAt(Random.Range(0, episodes.Count)));
+        return tempEpisodes;
+    }
+
     void OnClickEpisodeSelectButton()
     {
         episodeSelectPanel.SetActive(!episodeSelectPanel.activeSelf);       
