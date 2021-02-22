@@ -10,7 +10,6 @@ public class EpisodeSelectPanelController : MonoBehaviour
     GameObject episodeSelectPanel;
     IntroPanelController introPanel;
     List<Episode> episodes = new List<Episode> { };
-    int maxSelect;
     bool firstStart = true;
     void Start()
     {
@@ -30,17 +29,15 @@ public class EpisodeSelectPanelController : MonoBehaviour
         if (!firstStart)
         {
             episodes = SelectTutorialEpisode();
-            maxSelect = episodes.Count;
             bool isTutorial = true;
-            if (maxSelect == 0) //남은 튜토리얼이 없을 때
+            if (episodes.Count == 0) //남은 튜토리얼이 없을 때
             {
                 isTutorial = false;
                 episodes = SelectRandomEpisode();
-                maxSelect = episodes.Count;
             }
             for (int i = 0; i < 3; i++)
             {
-                if (i > maxSelect - 1)
+                if (i > episodes.Count - 1)
                 {
                     episodeButton[i].onClick.RemoveAllListeners();
                     if (isTutorial)
@@ -91,11 +88,9 @@ public class EpisodeSelectPanelController : MonoBehaviour
         if (c.data.Count != 0)
         {
             int index = Random.Range(0, c.data.Count); //전체 조합중 하나를 랜덤으로 선택
-            int k = 0;
             foreach (var episodeNum in c.data[index]) //선택한 조합 순서로 에피소드를 넣는다.
             {
                 tempEpisodes.Add(episodeList[episodeNum]);
-                k++;
             }
         }
         return tempEpisodes;
