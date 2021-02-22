@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
-using System.Linq;
 public class EpisodeSelectPanelController : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -10,40 +9,92 @@ public class EpisodeSelectPanelController : MonoBehaviour
     Button[] episodeButton = new Button[3];
     GameObject episodeSelectPanel;
     IntroPanelController introPanel;
-
-    Episode[] episodes;
-
+    List<Episode> episodes = new List<Episode> { };
+    bool firstStart = true;
     void Start()
     {
-        episodes = new Episode[3];
-        //TODO: 에피소드가 1~2개 일때 따로 조건문으로 처리하기(그러려면 해결된 에피소드가 저장되어있어야함)
-        SelectRandomEpisode();
-
         episodeSelectPanel = GameObject.Find("Canvas").transform.Find("EpisodeSelectPanel").gameObject;
         introPanel = GameObject.Find("Canvas").transform.Find("IntroPanel").gameObject.GetComponent<IntroPanelController>();
         openPanelButton = GameObject.Find("Canvas/EpisodeSelectButton").GetComponent<Button>();
         openPanelButton.onClick.AddListener(OnClickEpisodeSelectButton);
         for (int i = 0; i < 3; i++)
         {
-            var episode = episodes[i];
             episodeButton[i] = GameObject.Find($"Canvas/EpisodeSelectPanel/Episode{i + 1}Button").GetComponent<Button>();
-            episodeButton[i].GetComponentInChildren<Text>().text = episode.title;
-            episodeButton[i].onClick.AddListener(() => OnClickEpisodeButton(episode));
         }
         episodeSelectPanel.SetActive(false);
+        firstStart = false;
     }
-    void SelectRandomEpisode()
+    private void OnEnable()
     {
-        Combination c = new Combination(EpisodeCollection.Instance.EpisodeExceptTutorial.Count, 3); // nC3 = n개(튜토리얼를 제외한 에피소드의 수) 중 3개를 조합
-        int index = Random.Range(0, c.data.Count); //전체 조합중 하나를 랜덤으로 선택
-        int k = 0;
-        foreach (var episodeNum in c.data.ElementAt(index)) //선택한 조합 순서로 에피소드를 넣는다.
+        if (!firstStart)
         {
-            episodes[k] = EpisodeCollection.Instance.EpisodeExceptTutorial.ElementAt(episodeNum);
-            k++;
+            episodes = SelectTutorialEpisode();
+            bool isTutorial = true;
+            if (episodes.Count == 0) //남은 튜토리얼이 없을 때
+            {
+                isTutorial = false;
+                episodes = SelectRandomEpisode();
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                if (i > episodes.Count - 1)
+                {
+                    episodeButton[i].onClick.RemoveAllListeners();
+                    if (isTutorial)
+                    {
+                        episodeButton[i].GetComponentInChildren<Text>().text = "튜토리얼 에피소드 없음";
+                        episodeButton[i].onClick.AddListener(() => Debug.Log("모든 튜토리얼을 클리어 해주세요."));
+                    }
+                    else
+                    {
+                        episodeButton[i].GetComponentInChildren<Text>().text = "에피소드 없음";
+                        episodeButton[i].onClick.AddListener(() => Debug.Log("남은 에피소드가 없습니다."));
+                    }
+                }
+                else
+                {
+                    var episode = episodes[i];
+                    episodeButton[i].GetComponentInChildren<Text>().text = episode.title;
+                    episodeButton[i].onClick.AddListener(() => OnClickEpisodeButton(episode));
+                }
+            }          
         }
     }
-
+    List<Episode> SelectTutorialEpisode() //선택 가능한 에피소드의 수를 리턴 (최대 3)
+    {
+        var episodeList = new List<Episode> { };
+        foreach(var episode in EpisodeCollection.Instance.EpisodeTutorial)
+        {
+            if(!SaveData.Instance.ClearEpisodeList.Exists(id=>id==episode.id)) // 저장된 데이터에 해당 에피소드가 없을경우
+                episodeList.Add(episode); //현재 클리어가 안된 튜토리얼을 리스트에 저장한다.
+        }
+        return CombinationEpisode(episodeList);
+    }
+    List<Episode> SelectRandomEpisode() //선택 가능한 에피소드의 수를 리턴 (최대 3)
+    {
+        var episodeList = new List<Episode> { };
+        foreach (var episode in EpisodeCollection.Instance.EpisodeExceptTutorial)
+        {
+            if (!SaveData.Instance.ClearEpisodeList.Exists(id => id == episode.id)) // 저장된 데이터에 해당 에피소드가 없을경우
+                episodeList.Add(episode); //현재 클리어가 안된 에피소드을 리스트에 저장한다.
+        }
+        return CombinationEpisode(episodeList);
+    }
+    List<Episode> CombinationEpisode(List<Episode> episodeList)
+    {
+        var maxSelect = episodeList.Count > 3 ? 3 : episodeList.Count;
+        Combination c = new Combination(episodeList.Count, maxSelect); // nCr = n개 중 r개를 조합
+        var tempEpisodes = new List<Episode> { };
+        if (c.data.Count != 0)
+        {
+            int index = Random.Range(0, c.data.Count); //전체 조합중 하나를 랜덤으로 선택
+            foreach (var episodeNum in c.data[index]) //선택한 조합 순서로 에피소드를 넣는다.
+            {
+                tempEpisodes.Add(episodeList[episodeNum]);
+            }
+        }
+        return tempEpisodes;
+    }
     void OnClickEpisodeSelectButton()
     {
         episodeSelectPanel.SetActive(!episodeSelectPanel.activeSelf);       

@@ -42,6 +42,9 @@ public class ResultPanelController : MonoBehaviour
         if (!firstStart)
         {
             ResultStar(EpisodePlayer.CurrentStar);
+            var clear = false;
+            if (0<EpisodePlayer.CurrentStar) clear = true;
+            SaveData.Instance.AddclearEpisodeList(EpisodePlayer.CurrentEpisode.id,clear,EpisodePlayer.CurrentStar);
         }
     }
     // Update is called once per frame

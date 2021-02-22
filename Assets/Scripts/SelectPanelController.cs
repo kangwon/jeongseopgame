@@ -25,7 +25,6 @@ public class SelectPanelController : MonoBehaviour
     {
         if (page.isEnd == true) //해당 페이지가 끝인 경우
         {
-            // TODO :결과창을 보여주는 코드
             resultPanel.SetActive(true);
             Debug.Log($"별의 갯수 :{EpisodePlayer.CurrentStar}");
         }
