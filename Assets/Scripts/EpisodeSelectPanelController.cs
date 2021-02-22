@@ -10,12 +10,11 @@ public class EpisodeSelectPanelController : MonoBehaviour
     Button[] episodeButton = new Button[3];
     GameObject episodeSelectPanel;
     IntroPanelController introPanel;
-    Episode[] episodes;
+    Episode[] episodes = new Episode[3];
     int maxSelect;
     bool firstStart = true;
     void Start()
     {
-        episodes = new Episode[3];
         episodeSelectPanel = GameObject.Find("Canvas").transform.Find("EpisodeSelectPanel").gameObject;
         introPanel = GameObject.Find("Canvas").transform.Find("IntroPanel").gameObject.GetComponent<IntroPanelController>();
         openPanelButton = GameObject.Find("Canvas/EpisodeSelectButton").GetComponent<Button>();
