@@ -6,7 +6,7 @@ using System.IO;
 
 public class EpisodeCollection
 {
-    DirectoryInfo dir = new DirectoryInfo(Application.dataPath+"/Scripts/Resources/Episodes");
+    DirectoryInfo dir = new DirectoryInfo(Application.dataPath + "/Scripts/Resources/Episodes");
     List<Episode> episodes = new List<Episode> { };
     List<Episode> tutorialEpisodes = new List<Episode> { };
     private static readonly EpisodeCollection instance = new EpisodeCollection();
@@ -18,16 +18,13 @@ public class EpisodeCollection
     public static EpisodeCollection Instance { get => instance; }
     private void CollectEpisode()
     {
-        foreach(var item in dir.GetFiles())
+        foreach(FileInfo item in dir.GetFiles("*.json"))
         {
-            var temp = item.Name;
-            if (!temp.Contains("meta"))
-            {
-                temp = temp.Substring(0, temp.IndexOf("."));
-                episodes.Add(Episode.Load(temp));
-                if (temp.Contains("tutorial"))
-                    tutorialEpisodes.Add(Episode.Load(temp));
-            }
+            string fileName = item.Name;
+            string episodeId = fileName.Substring(0, fileName.IndexOf("."));
+            episodes.Add(Episode.Load(episodeId));
+            if (episodeId.Contains("tutorial"))
+                tutorialEpisodes.Add(Episode.Load(episodeId));
         }
     }
     public void PrintEpisode()
