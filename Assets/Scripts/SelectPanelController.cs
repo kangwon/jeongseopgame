@@ -23,7 +23,7 @@ public class SelectPanelController : MonoBehaviour
 
     public void OnPageUpdated(Page page)
     {
-        if (page.isEnd == true) //해당 페이지가 끝인 경우
+        if (page.isEnd) //해당 페이지가 끝인 경우
         {
             resultPanel.SetActive(true);
             Debug.Log($"별의 갯수 :{EpisodePlayer.CurrentStar}");
@@ -38,14 +38,14 @@ public class SelectPanelController : MonoBehaviour
                 button.transform.GetComponentInChildren<Text>().text = action.title;
                 button.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    EpisodePlayer.StarChange(action.starChange);
+                    EpisodePlayer.SelectAction(action);
                     while (buttonList.Count != 0)
                     {
                         Destroy(buttonList.ElementAt(0));
                         buttonList.RemoveAt(0);
                     }
-                    storyPanel.OnPageUpdated(EpisodePlayer.CurrentEpisode.pages[action.linkedPageId]);
-                    OnPageUpdated(EpisodePlayer.CurrentEpisode.pages[action.linkedPageId]);
+                    storyPanel.OnPageUpdated(EpisodePlayer.CurrentPage);
+                    OnPageUpdated(EpisodePlayer.CurrentPage);
                     Debug.Log($"Selected: {action.title}");
                 });
             }

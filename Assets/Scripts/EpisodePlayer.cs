@@ -20,15 +20,17 @@ public class EpisodePlayer
 
     public static Episode CurrentEpisode { get => Instance.episode; }
     public static Page CurrentPage { get => Instance.currentPage; }
-    public static void StarChange(int index) 
-    {
-        Instance.currentStar += index;
-    }
 
     public static void SetEpisode(Episode episode)
     {
         Instance.episode = episode;
         Instance.currentPage = episode.startPage;
         Instance.currentStar = 3;
+    }
+
+    public static void SelectAction(Action action)
+    {
+        Instance.currentStar += action.starChange;
+        Instance.currentPage = Instance.episode.pages[action.linkedPageId];
     }
 }
