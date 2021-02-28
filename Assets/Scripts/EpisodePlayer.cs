@@ -38,10 +38,17 @@ public class EpisodePlayer
     {
         Instance.currentStar += action.starChange;
         Instance.currentPage = Instance.episode.pages[action.linkedPageId];
-        
+        Instance.pageHistory[Instance.currentPage.id] = GetVisitCount(Instance.currentPage) + 1;
+    }
+    public static int GetVisitCount(Page page)
+    {
         if (Instance.pageHistory.TryGetValue(Instance.currentPage.id, out int value))
-            Instance.pageHistory[Instance.currentPage.id] = value + 1;
+            return value;
         else
-            Instance.pageHistory[Instance.currentPage.id] = 1;
+            return 0;
+    }
+    public static bool HasVisited(Page page)
+    {
+        return GetVisitCount(page) > 0;
     }
 }
