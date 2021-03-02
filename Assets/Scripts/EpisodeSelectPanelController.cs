@@ -4,30 +4,31 @@ using UnityEngine.UI;
 using UnityEngine;
 public class EpisodeSelectPanelController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Vector2 achorPosition = new Vector2(0, 0);
+    RectTransform rectTransform;
     Button openPanelButton;
     Button[] episodeButton = new Button[3];
-    GameObject episodeSelectPanel;
     IntroPanelController introPanel;
     List<Episode> episodes = new List<Episode> { };
     bool firstStart = true;
     void Start()
     {
-        episodeSelectPanel = GameObject.Find("Canvas").transform.Find("EpisodeSelectPanel").gameObject;
-        introPanel = GameObject.Find("Canvas").transform.Find("IntroPanel").gameObject.GetComponent<IntroPanelController>();
+        rectTransform = this.gameObject.GetComponent<RectTransform>();
+        introPanel = GameObject.Find("Canvas").transform.Find("EpisodeSelectPanel/IntroPanel").gameObject.GetComponent<IntroPanelController>();
         openPanelButton = GameObject.Find("Canvas/EpisodeSelectButton").GetComponent<Button>();
         openPanelButton.onClick.AddListener(OnClickEpisodeSelectButton);
         for (int i = 0; i < 3; i++)
         {
-            episodeButton[i] = GameObject.Find($"Canvas/EpisodeSelectPanel/Episode{i + 1}Button").GetComponent<Button>();
+            episodeButton[i] = GameObject.Find($"Canvas/EpisodeSelectPanel/ButtonPanel/Episode{i + 1}Button").GetComponent<Button>();
         }
-        episodeSelectPanel.SetActive(false);
+        this.gameObject.SetActive(false);
         firstStart = false;
     }
     private void OnEnable()
     {
         if (!firstStart)
         {
+            rectTransform.anchoredPosition = achorPosition;
             episodes = SelectTutorialEpisode();
             bool isTutorial = true;
             if (episodes.Count == 0) //남은 튜토리얼이 없을 때
@@ -97,7 +98,7 @@ public class EpisodeSelectPanelController : MonoBehaviour
     }
     void OnClickEpisodeSelectButton()
     {
-        episodeSelectPanel.SetActive(!episodeSelectPanel.activeSelf);       
+        this.gameObject.SetActive(!this.gameObject.activeSelf);       
     }
     void OnClickEpisodeButton(Episode episode)
     {
