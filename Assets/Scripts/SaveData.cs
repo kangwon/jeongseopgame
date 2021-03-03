@@ -5,11 +5,12 @@ using UnityEngine.UI;
 using SimpleJSON;
 using System.Linq;
 using System.IO;
-class checkEpisode
+
+class CheckStory
 {
     private bool isClear;
     private int star;
-    public checkEpisode(bool isClear, int star)
+    public CheckStory(bool isClear, int star)
     {
         this.isClear = isClear;
         this.star = star;
@@ -17,12 +18,15 @@ class checkEpisode
     public bool IsClear { get => isClear; }
     public int Star { get => star; }
 }
+
 public class SaveData
 {
-    Dictionary<string, checkEpisode> clearEpisodeList = new Dictionary<string, checkEpisode> { };
+    string SAVE_PATH = Application.persistentDataPath + "/PlayerSave.json";
+
+    Dictionary<string, CheckStory> clearedStoryDict = new Dictionary<string, CheckStory> { };
     private static readonly SaveData instance = new SaveData();
     public static SaveData Instance { get => instance; }
-    public List<string> ClearEpisodeList { get =>clearEpisodeList.Keys.ToList(); } 
+    public List<string> ClearedStoryList { get =>clearedStoryDict.Keys.ToList(); }
     public List<string> Star2Or3EpisodeList //별이 2,3개인 에피소드는 의뢰에 뜨지않게 하기 위한 리스트
     {
         get
@@ -43,7 +47,7 @@ public class SaveData
         get
         {
             int sum = 0;
-            foreach (checkEpisode star in clearEpisodeList.Values)
+            foreach (CheckStory star in clearedStoryDict.Values)
             {
                 sum += star.Star;
             }
@@ -64,48 +68,51 @@ public class SaveData
     public void Save()
     {
         var playerJson = new JSONObject();
-        var episodeList = new JSONArray();
-        foreach(var epi in clearEpisodeList)
+        var storyList = new JSONArray();
+        foreach(var item in clearedStoryDict)
         {
-            var episode = new JSONObject();
-            episode.Add("id", epi.Key);
-            episode.Add("clear", epi.Value.IsClear);
-            episode.Add("star", epi.Value.Star);
-            episodeList.Add(episode);
+            var story = new JSONObject();
+            story.Add("id", item.Key);
+            story.Add("clear", item.Value.IsClear);
+            story.Add("star", item.Value.Star);
+            storyList.Add(story);
         }
-        playerJson.Add("ClearEpisodeList", episodeList);
+        playerJson.Add("ClearedStoryList", storyList);
         Debug.Log(playerJson.ToString());
-        string path = Application.persistentDataPath + "/PlayerSave.json"; //데이터 저장
-        File.WriteAllText(path, playerJson.ToString());
+        File.WriteAllText(SAVE_PATH, playerJson.ToString());
     }
     public void Load()
     {
-        string path = Application.persistentDataPath + "/PlayerSave.json"; //데이터 불러오기
-        string jsonString = File.ReadAllText(path);
+        string jsonString = File.ReadAllText(SAVE_PATH);
         JSONObject playerJson = (JSONObject)JSON.Parse(jsonString);
-        clearEpisodeList.Clear();
-        for (int i = 0; i < playerJson["ClearEpisodeList"].AsArray.Count; i++)
+        clearedStoryDict.Clear();
+        for (int i = 0; i < playerJson["ClearedStoryList"].AsArray.Count; i++)
         {
-            string id = playerJson["ClearEpisodeList"].AsArray[i]["id"];
-            bool clear = playerJson["ClearEpisodeList"].AsArray[i]["clear"];
-            int star = playerJson["ClearEpisodeList"].AsArray[i]["star"];
+            string id = playerJson["ClearedStoryList"].AsArray[i]["id"];
+            bool clear = playerJson["ClearedStoryList"].AsArray[i]["clear"];
+            int star = playerJson["ClearedStoryList"].AsArray[i]["star"];
             AddclearEpisodeList(id, clear, star);
         }
         Debug.Log(playerJson.ToString());
     }
-    public void AddclearEpisodeList(string id,bool clear,int star)
+
+    public void AddclearEpisodeList(string id, bool clear, int star)
     {
-        if (clearEpisodeList.ContainsKey(id)) //해당키가 있는 경우
+        if (clearedStoryDict.ContainsKey(id)) //해당키가 있는 경우
         {
-            if (clearEpisodeList[id].Star < star)//이미 깼던 에피소드보다 별이 높을 경우
+            if (clearedStoryDict[id].Star < star)//이미 깼던 에피소드보다 별이 높을 경우
             {
-                clearEpisodeList.Remove(id); //이미 있는 데이터를 지운다.
-                clearEpisodeList.Add(id, new checkEpisode(clear, star));
+                clearedStoryDict[id] = new CheckStory(clear, star);
             }
         }
         else
         {
-            clearEpisodeList.Add(id, new checkEpisode(clear, star));
+            clearedStoryDict[id] = new CheckStory(clear, star);
         }
+    }
+
+    public static bool HasCleared(string id)
+    {
+        return Instance.clearedStoryDict.ContainsKey(id) && Instance.clearedStoryDict[id].IsClear;
     }
 }
