@@ -20,8 +20,19 @@ public class IntroPanelController : MonoBehaviour
         cancelButton = GameObject.Find("Canvas/EpisodeSelectPanel/IntroPanel/CancelButton").GetComponent<Button>();
         cancelButton.onClick.AddListener(OnClickCancelButton);
         introText = GameObject.Find("IntroText").GetComponent<Text>();
+        introText.text = FlavorText();
     }
-
+    void OnEnable()
+    {
+        if (introText != null)
+        {
+            introText.text = FlavorText();
+        }
+    }
+    string FlavorText()
+    {
+        return "대충 플레이버 텍스트들어갈 곳\nR:(대충 로봇이 하는말)\n재하:(대충 재하가 하는말)";
+    }
     void OnClickOkButton()
     {
         EpisodePlayer.SetEpisode(episode);
@@ -31,7 +42,6 @@ public class IntroPanelController : MonoBehaviour
     {
         EpisodeSelectPanel.SetActive(false);
     }
-
     public void Display(Episode episode)
     {
         this.introText.text = episode.intro.ToString();
