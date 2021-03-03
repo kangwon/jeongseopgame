@@ -21,12 +21,14 @@ public class IntroPanelController : MonoBehaviour
         cancelButton.onClick.AddListener(OnClickCancelButton);
         introText = GameObject.Find("IntroText").GetComponent<Text>();
         introText.text = FlavorText();
+        okButton.gameObject.SetActive(false);
     }
     void OnEnable()
     {
         if (introText != null)
         {
             introText.text = FlavorText();
+            okButton.gameObject.SetActive(false); //보고서 선택안했으므로 수락버튼을 끈다.
         }
     }
     string FlavorText()
@@ -45,6 +47,7 @@ public class IntroPanelController : MonoBehaviour
     public void Display(Episode episode)
     {
         this.introText.text = episode.intro.ToString();
+        this.okButton.gameObject.SetActive(true);
         this.episode = episode;
     }
 }
