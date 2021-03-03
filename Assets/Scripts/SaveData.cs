@@ -88,8 +88,14 @@ public class SaveData
         if (clearEpisodeList.ContainsKey(id)) //해당키가 있는 경우
         {
             if (clearEpisodeList[id].Star < star)//이미 깼던 에피소드보다 별이 높을 경우
+            {
                 clearEpisodeList.Remove(id); //이미 있는 데이터를 지운다.
+                clearEpisodeList.Add(id, new checkEpisode(clear, star));
+            }
         }
-        clearEpisodeList.Add(id, new checkEpisode(clear, star)); 
+        else
+        {
+            clearEpisodeList.Add(id, new checkEpisode(clear, star));
+        }
     }
 }
