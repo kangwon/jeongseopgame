@@ -8,16 +8,23 @@ public class ResultPanelController : MonoBehaviour
     GameObject resultPanel;
     Button resultButton;
     GameObject[] stars = new GameObject[3];
+    RectTransform rectTransform;
+    Text episodeName;
+    Text clearText;
     bool firstStart =true;
     // Start is called before the first frame update
     void Start()
     {
         resultPanel = GameObject.Find("ResultPanel").gameObject;
+        episodeName = GameObject.Find("ResultPanel/EpisodeName").GetComponent<Text>();
+        clearText = GameObject.Find("ResultPanel/ClearText").GetComponent<Text>();
         resultButton = GameObject.Find("ResultPanel/ResultButton").GetComponent<Button>();
         resultButton.onClick.AddListener(OnClickResultButton);
         for (int i = 0; i < 3; i++)
             stars[i] = GameObject.Find($"ResultPanel/Star{i + 1}/").transform.Find("Image").gameObject;
-        resultPanel.transform.localPosition = new Vector3(0,0,0);
+        rectTransform = resultPanel.GetComponent<RectTransform>();
+        rectTransform.anchoredPosition = GameObject.Find("Canvas/VertialLayout").GetComponent<RectTransform>().anchoredPosition;
+        rectTransform.sizeDelta = GameObject.Find("Canvas/VertialLayout").GetComponent<RectTransform>().sizeDelta;
         resultPanel.SetActive(false);
         firstStart = false;
     }
@@ -42,8 +49,19 @@ public class ResultPanelController : MonoBehaviour
         if (!firstStart)
         {
             ResultStar(EpisodePlayer.CurrentStar);
-            var clear = false;
-            if (0<EpisodePlayer.CurrentStar) clear = true;
+            episodeName.text ="Ep."+ EpisodePlayer.CurrentEpisode.title;
+            bool clear;
+            if (0 < EpisodePlayer.CurrentStar)
+            {
+                clear = true;
+                clearText.text = "의뢰 성공!";
+            }
+            else
+            {
+                clear = false;
+                clearText.text = "의뢰 실패...";
+            }
+
             SaveData.Instance.AddclearEpisodeList(EpisodePlayer.CurrentEpisode.id,clear,EpisodePlayer.CurrentStar);
         }
     }

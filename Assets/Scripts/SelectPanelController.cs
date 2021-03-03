@@ -25,8 +25,18 @@ public class SelectPanelController : MonoBehaviour
     {
         if (page.isEnd) //해당 페이지가 끝인 경우
         {
-            resultPanel.SetActive(true);
-            Debug.Log($"별의 갯수 :{EpisodePlayer.CurrentStar}");
+            GameObject button = Instantiate(ButtonPrefab, ButtonHolder.transform);
+            buttonList.Add(button);
+            button.transform.GetComponentInChildren<Text>().text = "[엔딩]";
+            button.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                while (buttonList.Count != 0)
+                {
+                    Destroy(buttonList.ElementAt(0));
+                    buttonList.RemoveAt(0);
+                }
+                 resultPanel.SetActive(true);
+            });
         }
         else //페이지가 끝이 아닐 경우
         {
