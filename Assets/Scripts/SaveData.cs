@@ -22,8 +22,8 @@ public class SaveData
     Dictionary<string, checkEpisode> clearEpisodeList = new Dictionary<string, checkEpisode> { };
     private static readonly SaveData instance = new SaveData();
     public static SaveData Instance { get => instance; }
-    public List<string> ClearEpisodeList { get =>clearEpisodeList.Keys.ToList(); }
-    public List<string> Star2Or3EpisodeList
+    public List<string> ClearEpisodeList { get =>clearEpisodeList.Keys.ToList(); } 
+    public List<string> Star2Or3EpisodeList //별이 2,3개인 에피소드는 의뢰에 뜨지않게 하기 위한 리스트
     {
         get
         {
@@ -85,6 +85,11 @@ public class SaveData
     }
     public void AddclearEpisodeList(string id,bool clear,int star)
     {
-        clearEpisodeList.Add(id, new checkEpisode(clear, star));
+        if (clearEpisodeList.ContainsKey(id)) //해당키가 있는 경우
+        {
+            if (clearEpisodeList[id].Star < star)//이미 깼던 에피소드보다 별이 높을 경우
+                clearEpisodeList.Remove(id); //이미 있는 데이터를 지운다.
+        }
+        clearEpisodeList.Add(id, new checkEpisode(clear, star)); 
     }
 }
