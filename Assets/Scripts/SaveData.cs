@@ -23,6 +23,21 @@ public class SaveData
     private static readonly SaveData instance = new SaveData();
     public static SaveData Instance { get => instance; }
     public List<string> ClearEpisodeList { get =>clearEpisodeList.Keys.ToList(); }
+    public List<string> Star2Or3EpisodeList
+    {
+        get
+        {
+            List<string> star2Or3EpisodeList = new List<string> { };
+            foreach(var temp in clearEpisodeList)
+            {
+                if(temp.Value.Star ==2 || temp.Value.Star == 3)
+                {
+                    star2Or3EpisodeList.Add(temp.Key);
+                }
+            }
+            return star2Or3EpisodeList;
+        }
+    }
     public int TotalClearStar
     {
         get

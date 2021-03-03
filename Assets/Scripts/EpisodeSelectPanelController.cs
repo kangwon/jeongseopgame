@@ -63,7 +63,7 @@ public class EpisodeSelectPanelController : MonoBehaviour
         var episodeList = new List<Episode> { };
         foreach(var episode in EpisodeCollection.Instance.EpisodeTutorial)
         {
-            if(!SaveData.Instance.ClearEpisodeList.Exists(id=>id==episode.id)) // 저장된 데이터에 해당 에피소드가 없을경우
+            if(!SaveData.Instance.Star2Or3EpisodeList.Exists(id=>id==episode.id)) // 저장된 데이터에 해당 에피소드가 없을경우+별이 0,1개인 경우
                 episodeList.Add(episode); //현재 클리어가 안된 튜토리얼을 리스트에 저장한다.
         }
         return CombinationEpisode(episodeList);
@@ -73,7 +73,7 @@ public class EpisodeSelectPanelController : MonoBehaviour
         var episodeList = new List<Episode> { };
         foreach (var episode in EpisodeCollection.Instance.EpisodeExceptTutorial)
         {
-            if (!SaveData.Instance.ClearEpisodeList.Exists(id => id == episode.id)) // 저장된 데이터에 해당 에피소드가 없을경우
+            if (!SaveData.Instance.Star2Or3EpisodeList.Exists(id => id == episode.id)) // 저장된 데이터에 해당 에피소드가 없을경우+별이 0,1개인 경우
                 episodeList.Add(episode); //현재 클리어가 안된 에피소드을 리스트에 저장한다.
         }
         return CombinationEpisode(episodeList);
