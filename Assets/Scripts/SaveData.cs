@@ -23,6 +23,19 @@ public class SaveData
     private static readonly SaveData instance = new SaveData();
     public static SaveData Instance { get => instance; }
     public List<string> ClearEpisodeList { get =>clearEpisodeList.Keys.ToList(); }
+    public int TotalClearStar
+    {
+        get
+        {
+            int sum = 0;
+            foreach (checkEpisode star in clearEpisodeList.Values)
+            {
+                sum += star.Star;
+            }
+            return sum;
+        }
+    }
+
     public void Save()
     {
         var playerJson = new JSONObject();

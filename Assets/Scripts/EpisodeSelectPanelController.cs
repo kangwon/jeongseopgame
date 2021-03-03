@@ -6,7 +6,6 @@ public class EpisodeSelectPanelController : MonoBehaviour
 {
     Vector2 achorPosition = new Vector2(0, 0);
     RectTransform rectTransform;
-    Button openPanelButton;
     Button[] episodeButton = new Button[3];
     IntroPanelController introPanel;
     List<Episode> episodes = new List<Episode> { };
@@ -15,8 +14,6 @@ public class EpisodeSelectPanelController : MonoBehaviour
     {
         rectTransform = this.gameObject.GetComponent<RectTransform>();
         introPanel = GameObject.Find("Canvas").transform.Find("EpisodeSelectPanel/IntroPanel").gameObject.GetComponent<IntroPanelController>();
-        openPanelButton = GameObject.Find("Canvas/EpisodeSelectButton").GetComponent<Button>();
-        openPanelButton.onClick.AddListener(OnClickEpisodeSelectButton);
         for (int i = 0; i < 3; i++)
         {
             episodeButton[i] = GameObject.Find($"Canvas/EpisodeSelectPanel/ButtonPanel/Episode{i + 1}Button").GetComponent<Button>();
@@ -96,10 +93,7 @@ public class EpisodeSelectPanelController : MonoBehaviour
         }
         return tempEpisodes;
     }
-    void OnClickEpisodeSelectButton()
-    {
-        this.gameObject.SetActive(!this.gameObject.activeSelf);       
-    }
+
     void OnClickEpisodeButton(Episode episode)
     {
         introPanel.Display(episode);
