@@ -38,7 +38,7 @@ public class SaveData
             return star2Or3EpisodeList;
         }
     }
-    public int TotalClearStar
+    public int TotalClearStar //클리어한 전체 별 수를 리턴
     {
         get
         {
@@ -50,7 +50,17 @@ public class SaveData
             return sum;
         }
     }
-
+    public int EpisodeClearStar(Episode episode)
+    {
+        if (clearEpisodeList.ContainsKey(episode.id)) //해당 에피소드 클리어 전적이 있다면
+        {
+            return clearEpisodeList[episode.id].Star;
+        }
+        else
+        {
+            return 0; // 없는 경우 0 리턴
+        }
+    }
     public void Save()
     {
         var playerJson = new JSONObject();
