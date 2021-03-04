@@ -54,8 +54,10 @@ public class CollectionPanelController : MonoBehaviour
             foreach(var otherButton in buttonList) //다른 버튼 사이즈는 그대로 바꾸기
             {
                 otherButton.GetComponent<RectTransform>().sizeDelta = defaultButtonSize;
+                otherButton.transform.GetChild(2).gameObject.SetActive(false);
             }
             button.GetComponent<RectTransform>().sizeDelta = new Vector2(0,100); // 누르면 해당 버튼 사이즈 커지게
+            button.transform.GetChild(2).gameObject.SetActive(true);
         });
         }
     }
