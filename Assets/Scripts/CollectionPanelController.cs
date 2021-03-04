@@ -56,12 +56,23 @@ public class CollectionPanelController : MonoBehaviour
             {
                 otherButton.GetComponent<RectTransform>().sizeDelta = defaultButtonSize;
                 otherButton.transform.GetChild(2).gameObject.SetActive(false);
+                otherButton.transform.GetChild(3).gameObject.SetActive(false);
             }
-            button.GetComponent<RectTransform>().sizeDelta = new Vector2(0,200); // 누르면 해당 버튼 사이즈 커지게
-            if (SaveData.Instance.EpisodeClearStar(item) > 1) //클리어 별이 2개 이상일때 도감에서 플레이 가능
+            button.GetComponent<RectTransform>().sizeDelta = new Vector2(0,250); // 누르면 해당 버튼 사이즈 커지게
+            if (SaveData.Instance.EpisodeClearStar(item) > 0)
             {
-                button.transform.GetChild(2).gameObject.SetActive(true);
-                button.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(() => OnClickEpisodeButton(item));
+                button.transform.GetChild(3).GetComponent<Text>().text = item.intro.ToString(); //별이 1개라도 있으면 intro는 보이게 
+                button.transform.GetChild(3).gameObject.SetActive(true);
+                if (SaveData.Instance.EpisodeClearStar(item) > 1) //클리어 별이 2개 이상일때 도감에서 플레이 가능
+                {
+                    button.transform.GetChild(2).gameObject.SetActive(true);
+                    button.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(() => OnClickEpisodeButton(item));
+                }
+            }
+            else 
+            {
+                button.transform.GetChild(3).GetComponent<Text>().text = "[잠김]";
+                button.transform.GetChild(3).gameObject.SetActive(true);
             }
         });
         }
