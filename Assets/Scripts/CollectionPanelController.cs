@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class CollectionPanelController : MonoBehaviour
 {
@@ -56,8 +57,12 @@ public class CollectionPanelController : MonoBehaviour
                 otherButton.GetComponent<RectTransform>().sizeDelta = defaultButtonSize;
                 otherButton.transform.GetChild(2).gameObject.SetActive(false);
             }
-            button.GetComponent<RectTransform>().sizeDelta = new Vector2(0,100); // 누르면 해당 버튼 사이즈 커지게
-            button.transform.GetChild(2).gameObject.SetActive(true);
+            button.GetComponent<RectTransform>().sizeDelta = new Vector2(0,200); // 누르면 해당 버튼 사이즈 커지게
+            if (SaveData.Instance.EpisodeClearStar(item) > 1) //클리어 별이 2개 이상일때 도감에서 플레이 가능
+            {
+                button.transform.GetChild(2).gameObject.SetActive(true);
+                button.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(() => OnClickEpisodeButton(item));
+            }
         });
         }
     }
@@ -66,8 +71,9 @@ public class CollectionPanelController : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
-    public void OnClickEpisodeButton(int index)
+    public void OnClickEpisodeButton(Episode episode)
     {
-
+        EpisodePlayer.SetEpisode(episode);
+        SceneManager.LoadScene("GameScene");
     }
 }
