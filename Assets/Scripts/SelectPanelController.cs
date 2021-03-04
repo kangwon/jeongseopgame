@@ -55,6 +55,8 @@ public class SelectPanelController : MonoBehaviour
                         buttonList.RemoveAt(0);
                     }
                     storyPanel.OnPageUpdated(EpisodePlayer.CurrentPage);
+                    while (!storyPanel.GetComponent<StoryPanelController>().endTyping) { }
+                    storyPanel.GetComponent<StoryPanelController>().endTyping = false;
                     OnPageUpdated(EpisodePlayer.CurrentPage);
                     Debug.Log($"Selected: {action.title}");
                 });
