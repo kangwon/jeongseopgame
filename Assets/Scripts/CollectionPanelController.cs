@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class CollectionPanelController : MonoBehaviour
 {
+    Vector2 defaultButtonSize;
     RectTransform rectTransform;
     GameObject buttonPrefab;
     GameObject buttonParent;
@@ -14,6 +15,7 @@ public class CollectionPanelController : MonoBehaviour
     void Start()
     {
         buttonPrefab = Resources.Load<GameObject>("CollectionButtonPrefab");
+        defaultButtonSize = buttonPrefab.GetComponent<RectTransform>().sizeDelta;
         buttonParent = GameObject.Find("CollectionPanel/CollectionButtonListPanel/ScrollView/Viewport/Content");
         backButton = GameObject.Find("CollectionPanel/BackButton").GetComponent<Button>();
         backButton.onClick.AddListener(BackButton);
@@ -46,14 +48,24 @@ public class CollectionPanelController : MonoBehaviour
         GameObject button = Instantiate(buttonPrefab, buttonParent.transform);
         buttonList.Add(button);
         button.transform.GetComponentInChildren<Text>().text = item.title;
+        button.transform.GetChild(1).GetComponent<Text>().text =$"{ SaveData.Instance.EpisodeClearStar(item)}";
         button.GetComponent<Button>().onClick.AddListener(() =>
         {
-            button.GetComponent<RectTransform>().sizeDelta = new Vector2(0,100); // 누르면 버튼 사이즈 커지게
+            foreach(var otherButton in buttonList) //다른 버튼 사이즈는 그대로 바꾸기
+            {
+                otherButton.GetComponent<RectTransform>().sizeDelta = defaultButtonSize;
+            }
+            button.GetComponent<RectTransform>().sizeDelta = new Vector2(0,100); // 누르면 해당 버튼 사이즈 커지게
         });
         }
     }
     public void BackButton()
     {
         this.gameObject.SetActive(false);
+    }
+
+    public void OnClickEpisodeButton(int index)
+    {
+
     }
 }
