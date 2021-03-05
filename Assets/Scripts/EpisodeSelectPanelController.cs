@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+
 public class EpisodeSelectPanelController : MonoBehaviour
 {
     Vector2 achorPosition = new Vector2(0, 0);
     RectTransform rectTransform;
+    
     Button[] episodeButton = new Button[3];
     IntroPanelController introPanel;
-    List<Episode> episodes = new List<Episode> { };
+    List<Story> stories = new List<Story>();
+    
     bool firstStart = true;
     void Start()
     {
@@ -26,16 +29,16 @@ public class EpisodeSelectPanelController : MonoBehaviour
         if (!firstStart)
         {
             rectTransform.anchoredPosition = achorPosition;
-            episodes = SelectTutorialEpisode();
+            stories = SelectTutorialStory();
             bool isTutorial = true;
-            if (episodes.Count == 0) //남은 튜토리얼이 없을 때
+            if (stories.Count == 0) //남은 튜토리얼이 없을 때
             {
                 isTutorial = false;
-                episodes = SelectRandomEpisode();
+                stories = SelectRandomStory();
             }
             for (int i = 0; i < 3; i++)
             {
-                if (i > episodes.Count - 1)
+                if (i > stories.Count - 1)
                 {
                     episodeButton[i].onClick.RemoveAllListeners();
                     if (isTutorial)
@@ -51,51 +54,51 @@ public class EpisodeSelectPanelController : MonoBehaviour
                 }
                 else
                 {
-                    var episode = episodes[i];
-                    episodeButton[i].GetComponentInChildren<Text>().text = episode.title;
-                    episodeButton[i].onClick.AddListener(() => OnClickEpisodeButton(episode));
+                    var story = stories[i];
+                    episodeButton[i].GetComponentInChildren<Text>().text = story.name;
+                    episodeButton[i].onClick.AddListener(() => OnClickEpisodeButton(story));
                 }
             }          
         }
     }
-    List<Episode> SelectTutorialEpisode() //선택 가능한 에피소드의 수를 리턴 (최대 3)
+    List<Story> SelectTutorialStory()
     {
-        var episodeList = new List<Episode> { };
-        foreach(var episode in EpisodeCollection.Instance.EpisodeTutorial)
+        var storyList = new List<Story>();
+        foreach(var story in StoryCollection.TutorialStories)
         {
-            if(!SaveData.Instance.Star2Or3EpisodeList.Exists(id=>id==episode.id)) // 저장된 데이터에 해당 에피소드가 없을경우+별이 0,1개인 경우
-                episodeList.Add(episode); //현재 클리어가 안된 튜토리얼을 리스트에 저장한다.
+            if(!SaveData.HasCleared(story.name)) // 해당 스토리를 클리어한 적이 없을 경우
+                storyList.Add(story); //현재 클리어가 안 된 튜토리얼을 리스트에 저장한다.
         }
-        return CombinationEpisode(episodeList);
+        return CombinationStory(storyList);
     }
-    List<Episode> SelectRandomEpisode() //선택 가능한 에피소드의 수를 리턴 (최대 3)
+    List<Story> SelectRandomStory()
     {
-        var episodeList = new List<Episode> { };
-        foreach (var episode in EpisodeCollection.Instance.EpisodeExceptTutorial)
+        var storyList = new List<Story>();
+        foreach (var story in StoryCollection.NotTutorialStories)
         {
-            if (!SaveData.Instance.Star2Or3EpisodeList.Exists(id => id == episode.id)) // 저장된 데이터에 해당 에피소드가 없을경우+별이 0,1개인 경우
-                episodeList.Add(episode); //현재 클리어가 안된 에피소드을 리스트에 저장한다.
+            if(!SaveData.HasCleared(story.name)) // 해당 스토리를 클리어한 적이 없을 경우
+                storyList.Add(story); //현재 클리어가 안된 에피소드을 리스트에 저장한다.
         }
-        return CombinationEpisode(episodeList);
+        return CombinationStory(storyList);
     }
-    List<Episode> CombinationEpisode(List<Episode> episodeList)
+    List<Story> CombinationStory(List<Story> storyList)
     {
-        var maxSelect = episodeList.Count > 3 ? 3 : episodeList.Count;
-        Combination c = new Combination(episodeList.Count, maxSelect); // nCr = n개 중 r개를 조합
-        var tempEpisodes = new List<Episode> { };
+        var maxSelect = storyList.Count > 3 ? 3 : storyList.Count;
+        Combination c = new Combination(storyList.Count, maxSelect); // nCr = n개 중 r개를 조합
+        var randomStories = new List<Story>();
         if (c.data.Count != 0)
         {
             int index = Random.Range(0, c.data.Count); //전체 조합중 하나를 랜덤으로 선택
-            foreach (var episodeNum in c.data[index]) //선택한 조합 순서로 에피소드를 넣는다.
+            foreach (var i in c.data[index]) //선택한 조합 순서로 에피소드를 넣는다.
             {
-                tempEpisodes.Add(episodeList[episodeNum]);
+                randomStories.Add(storyList[i]);
             }
         }
-        return tempEpisodes;
+        return randomStories;
     }
 
-    void OnClickEpisodeButton(Episode episode)
+    void OnClickEpisodeButton(Story story)
     {
-        introPanel.Display(episode);
+        introPanel.Display(story);
     }
 }

@@ -10,7 +10,7 @@ public class IntroPanelController : MonoBehaviour
     Button okButton;
     Button cancelButton;
     Text introText;
-    Episode episode;
+    Story story;
     GameObject EpisodeSelectPanel;
     void Start()
     {
@@ -37,17 +37,17 @@ public class IntroPanelController : MonoBehaviour
     }
     void OnClickOkButton()
     {
-        EpisodePlayer.SetEpisode(episode);
+        StoryPlayer.SetStory(story);
         SceneManager.LoadScene("GameScene");
     }
     void OnClickCancelButton()
     {
         EpisodeSelectPanel.SetActive(false);
     }
-    public void Display(Episode episode)
+    public void Display(Story story)
     {
-        this.introText.text = episode.intro.ToString();
+        this.introText.text = "의뢰서 들어갈 자리"; // TODO: intro 표시
         this.okButton.gameObject.SetActive(true);
-        this.episode = episode;
+        this.story = story;
     }
 }

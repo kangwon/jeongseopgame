@@ -11,7 +11,7 @@ public class SaveLoadController : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S)) SaveData.Instance.Save();
-        if (Input.GetKeyDown(KeyCode.L)) SaveData.Instance.Load();
+        if (Input.GetKeyDown(KeyCode.S)) SaveData.Save();
+        if (Input.GetKeyDown(KeyCode.L)) SaveData.Load();
     }
 }
