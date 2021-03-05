@@ -37,7 +37,7 @@ public class IntroPanelController : MonoBehaviour
     }
     void OnClickOkButton()
     {
-        // EpisodePlayer.SetEpisode(story);  TODO: story player 만들기
+        StoryPlayer.SetStory(story);
         SceneManager.LoadScene("GameScene");
     }
     void OnClickCancelButton()

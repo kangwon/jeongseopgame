@@ -17,20 +17,20 @@ public class SelectPanelController : MonoBehaviour
         ButtonHolder = GameObject.Find("ButtonHolder").gameObject;
         storyPanel = GameObject.Find("StoryPanel").GetComponent<StoryPanelController>();
         resultPanel = GameObject.Find("Canvas").transform.Find("ResultPanel").gameObject;
-        if (EpisodePlayer.isReady)
+        if (StoryPlayer.isReady)
         {
-            StartCoroutine(OnPageUpdatedCoroutine(EpisodePlayer.CurrentPage));
+            StartCoroutine(OnPassageUpdatedCoroutine(StoryPlayer.CurrentPassage));
         }
     }
  
-    IEnumerator OnPageUpdatedCoroutine(Page page)
+    IEnumerator OnPassageUpdatedCoroutine(Passage passage)
     {
         while (!storyPanel.endTyping)
         {
             yield return null;
         }
         storyPanel.endTyping = false;
-        if (page.isEnd) //해당 페이지가 끝인 경우
+        if (passage.isEnd) //해당 페이지가 끝인 경우
         {
             GameObject button = Instantiate(ButtonPrefab, ButtonHolder.transform);
             buttonList.Add(button);
@@ -47,24 +47,24 @@ public class SelectPanelController : MonoBehaviour
         }
         else //페이지가 끝이 아닐 경우
         {
-            for (int i = 0; i < page.actions.Count; i++)
+            for (int i = 0; i < passage.links.Count; i++)
             {
-                Action action = page.actions[i];
+                Link link = passage.links[i];
                 GameObject button = Instantiate(ButtonPrefab, ButtonHolder.transform);
                 buttonList.Add(button);
-                button.transform.GetComponentInChildren<Text>().text = action.title;
+                button.transform.GetComponentInChildren<Text>().text = link.name;
                 button.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    EpisodePlayer.SelectAction(action);
+                    StoryPlayer.SelectLink(link);
                     while (buttonList.Count != 0)
                     {
                         Destroy(buttonList.ElementAt(0));
                         buttonList.RemoveAt(0);
                     }
-                    storyPanel.OnPageUpdated(EpisodePlayer.CurrentPage);
-                    var temp =OnPageUpdatedCoroutine(EpisodePlayer.CurrentPage);
+                    storyPanel.OnPassageUpdated(StoryPlayer.CurrentPassage);
+                    var temp =OnPassageUpdatedCoroutine(StoryPlayer.CurrentPassage);
                     StartCoroutine(temp);
-                    Debug.Log($"Selected: {action.title}");
+                    Debug.Log($"Selected: {link.name}");
                 });
             }
         }

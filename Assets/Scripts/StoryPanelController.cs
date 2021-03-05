@@ -17,8 +17,8 @@ public class StoryPanelController : MonoBehaviour
         backButton = GameObject.Find("Canvas/BackButton").GetComponent<Button>();
         backButton.onClick.AddListener(OnClickBackButton);
         
-        if (EpisodePlayer.isReady)
-            OnPageUpdated(EpisodePlayer.CurrentPage);
+        if (StoryPlayer.isReady)
+            OnPassageUpdated(StoryPlayer.CurrentPassage);
     }
     void Update()
     {
@@ -44,30 +44,30 @@ public class StoryPanelController : MonoBehaviour
         SceneManager.LoadScene("MainScene");
     }
 
-    public void OnPageUpdated(Page page)
+    public void OnPassageUpdated(Passage passage)
     {
-        var temp = TypeCoroutine(storyText, page.body.ToString());
+        var temp = TypeCoroutine(storyText, passage.text.ToString());
         StartCoroutine(temp);
-      //  storyText.text = page.body.ToString();
+      //  storyText.text = passage.text.ToString();
     }
     IEnumerator TypeCoroutine(Text text,string description)
     {
-            for (int i = 0; i < description.Length; i++)
+        for (int i = 0; i < description.Length; i++)
+        {
+            if (!checkSkipTyping)
             {
-                if (!checkSkipTyping)
-                {
-                    text.text = description.Substring(0, i);
-                    yield return new WaitForSeconds(0.1f);
-                }
-                else
-                {
-                    text.text = description;
-                    endTyping = true;
-                    checkSkipTyping = false;
-                    yield break;
-                }
+                text.text = description.Substring(0, i);
+                yield return new WaitForSeconds(0.1f);
             }
-            endTyping = true;
+            else
+            {
+                text.text = description;
+                endTyping = true;
+                checkSkipTyping = false;
+                yield break;
+            }
+        }
+        endTyping = true;
     }
 
 }

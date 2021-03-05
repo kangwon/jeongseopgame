@@ -84,7 +84,7 @@ public class CollectionPanelController : MonoBehaviour
 
     public void OnClickStoryButton(Story story)
     {
-        // EpisodePlayer.SetEpisode(episode);
+        StoryPlayer.SetStory(story);
         SceneManager.LoadScene("GameScene");
     }
 }

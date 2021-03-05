@@ -48,10 +48,10 @@ public class ResultPanelController : MonoBehaviour
     {
         if (!firstStart)
         {
-            ResultStar(EpisodePlayer.CurrentStar);
-            episodeName.text ="Ep."+ EpisodePlayer.CurrentEpisode.title;
+            ResultStar(StoryPlayer.CurrentStar);
+            episodeName.text ="Ep."+ StoryPlayer.CurrentStory.name;
             bool clear;
-            if (0 < EpisodePlayer.CurrentStar)
+            if (0 < StoryPlayer.CurrentStar)
             {
                 clear = true;
                 clearText.text = "의뢰 성공!";
@@ -61,8 +61,7 @@ public class ResultPanelController : MonoBehaviour
                 clear = false;
                 clearText.text = "의뢰 실패...";
             }
-
-            SaveData.Instance.AddclearEpisodeList(EpisodePlayer.CurrentEpisode.id,clear,EpisodePlayer.CurrentStar);
+            SaveData.Instance.AddclearEpisodeList(StoryPlayer.CurrentStory.name, clear, StoryPlayer.CurrentStar);
         }
     }
     // Update is called once per frame
