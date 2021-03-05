@@ -18,11 +18,18 @@ public class SelectPanelController : MonoBehaviour
         storyPanel = GameObject.Find("StoryPanel").GetComponent<StoryPanelController>();
         resultPanel = GameObject.Find("Canvas").transform.Find("ResultPanel").gameObject;
         if (EpisodePlayer.isReady)
-            OnPageUpdated(EpisodePlayer.CurrentPage);
+        {
+            StartCoroutine(OnPageUpdatedCoroutine(EpisodePlayer.CurrentPage));
+        }
     }
-
-    public void OnPageUpdated(Page page)
+ 
+    IEnumerator OnPageUpdatedCoroutine(Page page)
     {
+        while (!storyPanel.endTyping)
+        {
+            yield return null;
+        }
+        storyPanel.endTyping = false;
         if (page.isEnd) //해당 페이지가 끝인 경우
         {
             GameObject button = Instantiate(ButtonPrefab, ButtonHolder.transform);
@@ -35,7 +42,7 @@ public class SelectPanelController : MonoBehaviour
                     Destroy(buttonList.ElementAt(0));
                     buttonList.RemoveAt(0);
                 }
-                 resultPanel.SetActive(true);
+                resultPanel.SetActive(true);
             });
         }
         else //페이지가 끝이 아닐 경우
@@ -55,7 +62,8 @@ public class SelectPanelController : MonoBehaviour
                         buttonList.RemoveAt(0);
                     }
                     storyPanel.OnPageUpdated(EpisodePlayer.CurrentPage);
-                    OnPageUpdated(EpisodePlayer.CurrentPage);
+                    var temp =OnPageUpdatedCoroutine(EpisodePlayer.CurrentPage);
+                    StartCoroutine(temp);
                     Debug.Log($"Selected: {action.title}");
                 });
             }
