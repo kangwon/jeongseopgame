@@ -25,7 +25,7 @@ public class MainSceneUpdateController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        starText.text = $"({SaveData.Instance.TotalClearStar}/{EpisodeCollection.Instance.AllEpisode.Count*3})";
+        starText.text = $"({SaveData.Instance.TotalClearStar}/{StoryCollection.AllStory.Count * 3})";
     }
 
     void OnClickEpisodeSelectButton()

@@ -21,18 +21,18 @@ class CheckStory
 
 public class SaveData
 {
-    string SAVE_PATH = Application.persistentDataPath + "/PlayerSave.json";
+    static string SAVE_PATH = Application.persistentDataPath + "/PlayerSave.json";
 
     Dictionary<string, CheckStory> clearedStoryDict = new Dictionary<string, CheckStory> { };
     private static readonly SaveData instance = new SaveData();
     public static SaveData Instance { get => instance; }
-    public List<string> ClearedStoryList { get =>clearedStoryDict.Keys.ToList(); }
+    public List<string> ClearedStoryList { get => clearedStoryDict.Keys.ToList(); }
     public List<string> Star2Or3EpisodeList //별이 2,3개인 에피소드는 의뢰에 뜨지않게 하기 위한 리스트
     {
         get
         {
             List<string> star2Or3EpisodeList = new List<string> { };
-            foreach(var temp in clearEpisodeList)
+            foreach(var temp in clearedStoryDict)
             {
                 if(temp.Value.Star ==2 || temp.Value.Star == 3)
                 {
@@ -54,22 +54,22 @@ public class SaveData
             return sum;
         }
     }
-    public int EpisodeClearStar(Episode episode)
+    public static int StoryClearStar(Story story)
     {
-        if (clearEpisodeList.ContainsKey(episode.id)) //해당 에피소드 클리어 전적이 있다면
+        if (Instance.clearedStoryDict.ContainsKey(story.name)) //해당 에피소드 클리어 전적이 있다면
         {
-            return clearEpisodeList[episode.id].Star;
+            return Instance.clearedStoryDict[story.name].Star;
         }
         else
         {
             return 0; // 없는 경우 0 리턴
         }
     }
-    public void Save()
+    public static void Save()
     {
         var playerJson = new JSONObject();
         var storyList = new JSONArray();
-        foreach(var item in clearedStoryDict)
+        foreach(var item in Instance.clearedStoryDict)
         {
             var story = new JSONObject();
             story.Add("id", item.Key);
@@ -81,17 +81,17 @@ public class SaveData
         Debug.Log(playerJson.ToString());
         File.WriteAllText(SAVE_PATH, playerJson.ToString());
     }
-    public void Load()
+    public static void Load()
     {
         string jsonString = File.ReadAllText(SAVE_PATH);
         JSONObject playerJson = (JSONObject)JSON.Parse(jsonString);
-        clearedStoryDict.Clear();
+        Instance.clearedStoryDict.Clear();
         for (int i = 0; i < playerJson["ClearedStoryList"].AsArray.Count; i++)
         {
             string id = playerJson["ClearedStoryList"].AsArray[i]["id"];
             bool clear = playerJson["ClearedStoryList"].AsArray[i]["clear"];
             int star = playerJson["ClearedStoryList"].AsArray[i]["star"];
-            AddclearEpisodeList(id, clear, star);
+            Instance.AddclearEpisodeList(id, clear, star);
         }
         Debug.Log(playerJson.ToString());
     }
