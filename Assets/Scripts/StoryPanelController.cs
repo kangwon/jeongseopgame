@@ -16,9 +16,11 @@ public class StoryPanelController : MonoBehaviour
         storyText = GameObject.Find("StoryText").GetComponent<Text>();
         backButton = GameObject.Find("Canvas/BackButton").GetComponent<Button>();
         backButton.onClick.AddListener(OnClickBackButton);
+
+        StoryPlayer.SetStory(Story.Load("vartest"));
         
         if (StoryPlayer.isReady)
-            OnPassageUpdated(StoryPlayer.CurrentPassage);
+            OnPassageUpdated();
     }
     void Update()
     {
@@ -44,13 +46,12 @@ public class StoryPanelController : MonoBehaviour
         SceneManager.LoadScene("MainScene");
     }
 
-    public void OnPassageUpdated(Passage passage)
+    public void OnPassageUpdated()
     {
-        var temp = TypeCoroutine(storyText, passage.text.ToString());
+        var temp = TypeCoroutine(storyText, StoryPlayer.ProcessedPassageText);
         StartCoroutine(temp);
-      //  storyText.text = passage.text.ToString();
     }
-    IEnumerator TypeCoroutine(Text text,string description)
+    IEnumerator TypeCoroutine(Text text, string description)
     {
         for (int i = 0; i < description.Length; i++)
         {
@@ -69,5 +70,4 @@ public class StoryPanelController : MonoBehaviour
         }
         endTyping = true;
     }
-
 }

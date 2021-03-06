@@ -61,8 +61,8 @@ public class SelectPanelController : MonoBehaviour
                         Destroy(buttonList.ElementAt(0));
                         buttonList.RemoveAt(0);
                     }
-                    storyPanel.OnPassageUpdated(StoryPlayer.CurrentPassage);
-                    var temp =OnPassageUpdatedCoroutine(StoryPlayer.CurrentPassage);
+                    storyPanel.OnPassageUpdated();
+                    var temp = OnPassageUpdatedCoroutine(StoryPlayer.CurrentPassage);
                     StartCoroutine(temp);
                     Debug.Log($"Selected: {link.name}");
                 });
