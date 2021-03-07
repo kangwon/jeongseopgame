@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public class StoryPlayer
+public partial class StoryPlayer
 {
     private Story story;
     private Passage currentPassage;
-    private string processedPassageText;
-    private Dictionary<string, object> variables = new Dictionary<string, object>();
     private int currentStar;
     
     private static readonly StoryPlayer instance = new StoryPlayer();
@@ -32,28 +30,11 @@ public class StoryPlayer
         get => Instance.currentPassage; 
         set
         {
-            var passage = value;
-            Instance.currentPassage = passage;
-
-            Regex setRegex = new Regex(@"\(set: \$(?<key>\w+) to (?<value>.+)\)");
-            MatchCollection matches = setRegex.Matches(passage.text);
-            foreach (Match match in matches)
-            {
-                GroupCollection groups = match.Groups;
-                Instance.variables[groups["key"].Value] = ParseType(groups["value"].Value);
-            }
-            // For debuging
-            foreach (var kv in Instance.variables)
-            {
-                Debug.Log($"{kv.Key}: {kv.Value} ({kv.Value.GetType()})");
-            }
-            string setRemovedText = setRegex.Replace(passage.text, "").Trim();
-            Instance.processedPassageText = setRemovedText;
+            Instance.currentPassage = value;
+            Instance.processedPassageText = Instance.ProcessPassageText(value.text);
         } 
     }
     public static string ProcessedPassageText { get => Instance.processedPassageText; }
-
-    public static object GetVariableValue(string varname) => Instance.variables[varname];
     
     public static void SetStory(Story story)
     {
@@ -66,8 +47,14 @@ public class StoryPlayer
     {
         CurrentPassage = Instance.story.GetPassage(link.pid);
     }
+}
 
-    private static object ParseType(string symbol)
+public partial class StoryPlayer
+{
+    private string processedPassageText;
+    private Dictionary<string, object> variables = new Dictionary<string, object>();
+
+    private object ParseType(string symbol)
     {
         Regex stringRegex = new Regex(@"""(?<value>.+)""");
         Regex intRegex = new Regex(@"(?<value>\d+)");
@@ -91,5 +78,44 @@ public class StoryPlayer
             return bool.Parse(boolMatch.Groups["value"].Value);
         
         throw new NotImplementedException($"Invalid variable value: {symbol}");
+    }
+
+    private string ProcessSetMacro(string originText)
+    {
+        Regex rx = new Regex(@"\(set: \$(?<key>[a-zA-Z0-9_-]+) to (?<value>.+)\)");
+        MatchCollection matches = rx.Matches(originText);
+        foreach (Match match in matches)
+        {
+            GroupCollection groups = match.Groups;
+            variables[groups["key"].Value] = ParseType(groups["value"].Value);
+        }
+        // For debuging
+        foreach (var kv in variables)
+        {
+            Debug.Log($"{kv.Key}: {kv.Value} ({kv.Value.GetType()})");
+        }
+        string setRemovedText = rx.Replace(originText, "").Trim();
+        return setRemovedText;
+    }
+
+    private string ProcessVariable(string originText)
+    {
+        Regex rx = new Regex(@"\$(?<varname>[a-zA-Z0-9_-]+)");
+        MatchCollection matches = rx.Matches(originText);
+        string varReplacedText = originText;
+        foreach (Match match in matches)
+        {
+            GroupCollection groups = match.Groups;
+            var varname = groups["varname"].Value;
+            varReplacedText = varReplacedText.Replace($"${varname}", variables[varname].ToString());
+        }
+        return varReplacedText;
+    }
+
+    private string ProcessPassageText(string rawText)
+    {
+        string setRemovedText = ProcessSetMacro(rawText);
+        string varReplacedText = ProcessVariable(setRemovedText);
+        return varReplacedText;
     }
 }
