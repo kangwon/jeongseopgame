@@ -1,0 +1,153 @@
+{
+  "passages": [
+    {
+      "text": "(set: $coin to 5)\n(set: $carname to \"none\")\n(set: $has_car to false)\n(set: $STAR to 0)\n\n넌 코인이 $coin개 있어.\n\n[[코인을 1개 얻는다.->얻기]]\n[[코인을 1개 줄인다.->줄이기]]",
+      "links": [
+        {
+          "name": "코인을 1개 얻는다.",
+          "link": "얻기",
+          "pid": "2"
+        },
+        {
+          "name": "코인을 1개 줄인다.",
+          "link": "줄이기",
+          "pid": "3"
+        }
+      ],
+      "name": "시작",
+      "pid": "1",
+      "position": {
+        "x": "178",
+        "y": "207"
+      }
+    },
+    {
+      "text": "(set: $coin to $coin + 1)\n\n이제 코인이 $coin 만큼 있어.\n\n[[더 얻기.->얻기]]\n[[코인 줄이기.->줄이기]]\n[[다음.->구매]]",
+      "links": [
+        {
+          "name": "더 얻기.",
+          "link": "얻기",
+          "pid": "2"
+        },
+        {
+          "name": "코인 줄이기.",
+          "link": "줄이기",
+          "pid": "3"
+        },
+        {
+          "name": "다음.",
+          "link": "구매",
+          "pid": "4"
+        }
+      ],
+      "name": "얻기",
+      "pid": "2",
+      "position": {
+        "x": "437",
+        "y": "116"
+      }
+    },
+    {
+      "text": "(set: $coin to $coin - 1)\n\n이제 코인이 $coin 만큼 있어.\n\n[[코인 얻기.->얻기]]\n[[더 줄이기.->줄이기]]\n[[다음.->구매]]",
+      "links": [
+        {
+          "name": "코인 얻기.",
+          "link": "얻기",
+          "pid": "2"
+        },
+        {
+          "name": "더 줄이기.",
+          "link": "줄이기",
+          "pid": "3"
+        },
+        {
+          "name": "다음.",
+          "link": "구매",
+          "pid": "4"
+        }
+      ],
+      "name": "줄이기",
+      "pid": "3",
+      "position": {
+        "x": "437",
+        "y": "312"
+      }
+    },
+    {
+      "text": "코인이 $coin 개 있어.\n\n호주머니를 확인해 보니 (if: $coin > 7)[돈이 꽤 많아.](else-if: $coin > 4)[돈이 그렇게 많지는 않아.](else-if: $coin >1)[돈이 적어.](else:)[빈털터리야.]\n\n[[아이스크림을 살거야.]]\n(if: $coin > 10)[[돈이 많으니까 차를 사자.]]",
+      "links": [
+        {
+          "name": "아이스크림을 살거야.",
+          "link": "아이스크림을 살거야.",
+          "pid": "5"
+        },
+        {
+          "name": "돈이 많으니까 차를 사자.",
+          "link": "돈이 많으니까 차를 사자.",
+          "pid": "6"
+        }
+      ],
+      "name": "구매",
+      "pid": "4",
+      "position": {
+        "x": "733",
+        "y": "208"
+      }
+    },
+    {
+      "text": "아이스크림을 샀어.\n\n(set: $coin to $coin - 3)\n\n이제 파티에 가자.\n\n[[파티에 간다.->파티장]]",
+      "links": [
+        {
+          "name": "파티에 간다.",
+          "link": "파티장",
+          "pid": "7"
+        }
+      ],
+      "name": "아이스크림을 살거야.",
+      "pid": "5",
+      "position": {
+        "x": "968",
+        "y": "128"
+      }
+    },
+    {
+      "text": "(if: $coin > 15)[(set: $carname to \"부가티\")(set:$carprice to 15)](else: )[(set: $carname to \"람보르기니\")(set:$carprice to 10)]\n\n\n(set: $has_car to true)\n(set: $coin to $coin - $carprice)\n\n돈을 탈탈 털어서 $carname를 샀어.\n\n이제 코인이 $coin만큼 남았어.\n\n\n이제 파티에 가보자.\n\n[[파티에 간다.->파티장]]",
+      "links": [
+        {
+          "name": "파티에 간다.",
+          "link": "파티장",
+          "pid": "7"
+        }
+      ],
+      "name": "돈이 많으니까 차를 사자.",
+      "pid": "6",
+      "position": {
+        "x": "969",
+        "y": "306"
+      }
+    },
+    {
+      "text": "(if: $has_car is not true)\n[뭐야? 차도 없는 거지가 어딜 기어와? 썩 꺼져! (set: $STAR to 0)]\n(else-if: $carname is \"람보르기니\")\n[람보르기니? 벼락부자들 타고 다니는 차가 다 그렇지. 입장은 시켜 줄게.(set: $STAR to 2)]\n(else: )\n[아이고, 주인님 오셨습니까?(set: $STAR to 3)]\n\n끝.",
+      "name": "파티장",
+      "pid": "7",
+      "position": {
+        "x": "1178",
+        "y": "214"
+      }
+    },
+    {
+      "text": "샘플 스토리 인트로",
+      "name": "인트로",
+      "pid": "8",
+      "position": {
+        "x": "244",
+        "y": "400.5"
+      }
+    }
+  ],
+  "name": "vartest2",
+  "startnode": "1",
+  "creator": "Twine",
+  "creator-version": "2.3.13",
+  "ifid": "C0576FA6-C307-4F43-9F03-FDD7E7C63823"
+}

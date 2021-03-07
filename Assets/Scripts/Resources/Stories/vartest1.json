@@ -17,8 +17,8 @@
       "name": "시작",
       "pid": "1",
       "position": {
-        "x": "174",
-        "y": "208"
+        "x": "178",
+        "y": "207"
       }
     },
     {
@@ -134,10 +134,26 @@
         "x": "1178",
         "y": "214"
       }
+    },
+    {
+      "text": "샘플 스토리 인트로\n[[시작]]",
+      "links": [
+        {
+          "name": "시작",
+          "link": "시작",
+          "pid": "1"
+        }
+      ],
+      "name": "인트로",
+      "pid": "8",
+      "position": {
+        "x": "127",
+        "y": "371.5"
+      }
     }
   ],
-  "name": "vartest",
-  "startnode": "1",
+  "name": "vartest1",
+  "startnode": "8",
   "creator": "Twine",
   "creator-version": "2.3.13",
   "ifid": "C0576FA6-C307-4F43-9F03-FDD7E7C63823"
