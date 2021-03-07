@@ -46,7 +46,7 @@ public class IntroPanelController : MonoBehaviour
     }
     public void Display(Story story)
     {
-        this.introText.text = "의뢰서 들어갈 자리"; // TODO: intro 표시
+        this.introText.text = story.introPassage.text;
         this.okButton.gameObject.SetActive(true);
         this.story = story;
     }
