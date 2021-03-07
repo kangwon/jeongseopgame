@@ -55,7 +55,7 @@ public class Story : IEquatable<Story>
         foreach (Passage passage in story.passages)
         {
             story.passageDict[passage.pid] = passage;
-            if (passage.name == "인트로")
+            if (passage.name == "의뢰서")
             {
                 story.introPassage = passage;
                 if (passage.links.Count == 1)
