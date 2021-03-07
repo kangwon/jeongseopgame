@@ -61,7 +61,7 @@ public class CollectionPanelController : MonoBehaviour
                 button.GetComponent<RectTransform>().sizeDelta = new Vector2(0,250); // 누르면 해당 버튼 사이즈 커지게
                 if (SaveData.StoryClearStar(story) > 0)
                 {
-                    button.transform.GetChild(3).GetComponent<Text>().text = "TODO: 의뢰서 들어갈 자리"; // 별이 1개라도 있으면 intro는 보이게 
+                    button.transform.GetChild(3).GetComponent<Text>().text = story.introPassage.text; // 별이 1개라도 있으면 intro는 보이게 
                     button.transform.GetChild(3).gameObject.SetActive(true);
                     if (SaveData.StoryClearStar(story) > 1) //클리어 별이 2개 이상일때 도감에서 플레이 가능
                     {

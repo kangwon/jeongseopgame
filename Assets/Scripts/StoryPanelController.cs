@@ -16,8 +16,6 @@ public class StoryPanelController : MonoBehaviour
         storyText = GameObject.Find("StoryText").GetComponent<Text>();
         backButton = GameObject.Find("Canvas/BackButton").GetComponent<Button>();
         backButton.onClick.AddListener(OnClickBackButton);
-
-        StoryPlayer.SetStory(Story.Load("vartest"));
         
         if (StoryPlayer.isReady)
             OnPassageUpdated();
