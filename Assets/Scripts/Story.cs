@@ -31,6 +31,7 @@ public class Story : IEquatable<Story>
 {
     public string name;
     public string startnode;
+    public Passage introPassage;
     public List<Passage> passages;
     private Dictionary<string, Passage> passageDict;
 
@@ -52,7 +53,15 @@ public class Story : IEquatable<Story>
         Story story = JsonUtility.FromJson<Story>(jsonFile.text);
         story.passageDict = new Dictionary<string, Passage>();
         foreach (Passage passage in story.passages)
+        {
             story.passageDict[passage.pid] = passage;
+            if (passage.name == "인트로")
+            {
+                story.introPassage = passage;
+                if (passage.links.Count == 1)
+                    story.startnode = passage.links[0].pid;
+            }
+        }
         return story;
     }
 
