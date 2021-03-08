@@ -8,21 +8,13 @@ public partial class StoryPlayer
 {
     private Story story;
     private Passage currentPassage;
-    private int currentStar;
     
     private static readonly StoryPlayer instance = new StoryPlayer();
     static StoryPlayer() {}
     private StoryPlayer() {}
     
     public static StoryPlayer Instance { get => instance; }
-    public static int CurrentStar 
-    {
-         get {
-            if (Instance.currentStar < 0) return 0;
-            else if (Instance.currentStar < 3) return Instance.currentStar;
-            else return 3;
-        }
-    }
+    public static int CurrentStar { get => Instance.GetVariable<int>("STAR", 0); }
     public static bool isReady { get => Instance.story != null; }
     public static Story CurrentStory { get => Instance.story; }
     public static Passage CurrentPassage 
@@ -40,7 +32,6 @@ public partial class StoryPlayer
     {
         Instance.story = story;
         CurrentPassage = story.GetStartPassage();
-        Instance.currentStar = 3;
     }
     
     public static void SelectLink(Link link)
@@ -53,6 +44,15 @@ public partial class StoryPlayer
 {
     private string processedPassageText;
     private Dictionary<string, object> variables = new Dictionary<string, object>();
+
+    private T GetVariable<T>(string key, object _default)
+    {
+        object value;
+        if(variables.TryGetValue(key, out value))
+            return (T)value;
+        else
+            return (T)_default;
+    }
 
     private object ParseType(string symbol)
     {

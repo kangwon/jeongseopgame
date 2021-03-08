@@ -61,7 +61,7 @@ public class ResultPanelController : MonoBehaviour
                 clear = false;
                 clearText.text = "의뢰 실패...";
             }
-            SaveData.Instance.AddclearEpisodeList(StoryPlayer.CurrentStory.name, clear, StoryPlayer.CurrentStar);
+            SaveData.Instance.AddClearStory(StoryPlayer.CurrentStory.name, clear, StoryPlayer.CurrentStar);
         }
     }
     // Update is called once per frame
