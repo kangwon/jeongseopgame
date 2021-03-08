@@ -91,12 +91,12 @@ public class SaveData
             string id = playerJson["ClearedStoryList"].AsArray[i]["id"];
             bool clear = playerJson["ClearedStoryList"].AsArray[i]["clear"];
             int star = playerJson["ClearedStoryList"].AsArray[i]["star"];
-            Instance.AddclearEpisodeList(id, clear, star);
+            Instance.AddClearStory(id, clear, star);
         }
         Debug.Log(playerJson.ToString());
     }
 
-    public void AddclearEpisodeList(string id, bool clear, int star)
+    public void AddClearStory(string id, bool clear, int star)
     {
         if (clearedStoryDict.ContainsKey(id)) //해당키가 있는 경우
         {
