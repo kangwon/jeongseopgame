@@ -8,7 +8,7 @@ public class StoryPlayer
 {
     private Story story;
     private Passage currentPassage;
-    private Dictionary<string, object> variables = new Dictionary<string, object>();
+    private Dictionary<string, object> variables;
     
     private static readonly StoryPlayer instance = new StoryPlayer();
     static StoryPlayer() {}
@@ -23,7 +23,7 @@ public class StoryPlayer
         get => Instance.currentPassage; 
         set
         {
-            var processor = PassageProcessor.ProcessPassage(value, Instance.variables);
+            var processor = PassageProcessor.Process(value, Instance.variables);
             Instance.currentPassage = processor.passage;
             Instance.variables = processor.variables;
         } 
@@ -41,6 +41,7 @@ public class StoryPlayer
     public static void SetStory(Story story)
     {
         Instance.story = story;
+        Instance.variables = story.introVariables;
         CurrentPassage = story.GetStartPassage();
     }
     

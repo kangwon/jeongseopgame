@@ -79,7 +79,7 @@ public class PassageProcessor
         return varReplacedText;
     }
 
-    public static PassageProcessor ProcessPassage(Passage passage, Dictionary<string, object> initialVariables)
+    public static PassageProcessor Process(Passage passage, Dictionary<string, object> initialVariables)
     {
         var processor = new PassageProcessor(initialVariables);
         processor.passage.pid = passage.pid;

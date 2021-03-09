@@ -32,6 +32,7 @@ public class Story : IEquatable<Story>
     public string name;
     public string startnode;
     public Passage introPassage;
+    public Dictionary<string, object> introVariables;
     public List<Passage> passages;
     private Dictionary<string, Passage> passageDict;
 
@@ -57,7 +58,9 @@ public class Story : IEquatable<Story>
             story.passageDict[passage.pid] = passage;
             if (passage.name == "의뢰서")
             {
-                story.introPassage = passage;
+                var introProcessor = PassageProcessor.Process(passage, new Dictionary<string, object>());
+                story.introPassage = introProcessor.passage;
+                story.introVariables = introProcessor.variables;
                 if (passage.links.Count == 1)
                     story.startnode = passage.links[0].pid;
             }
