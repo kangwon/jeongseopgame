@@ -46,7 +46,7 @@ public class StoryPanelController : MonoBehaviour
 
     public void OnPassageUpdated()
     {
-        var temp = TypeCoroutine(storyText, StoryPlayer.ProcessedPassageText);
+        var temp = TypeCoroutine(storyText, StoryPlayer.CurrentPassage.text);
         StartCoroutine(temp);
     }
     IEnumerator TypeCoroutine(Text text, string description)
