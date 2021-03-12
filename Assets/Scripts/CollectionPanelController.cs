@@ -50,6 +50,10 @@ public class CollectionPanelController : MonoBehaviour
             buttonList.Add(button);
             button.transform.GetComponentInChildren<Text>().text = story.name;
             button.transform.GetChild(1).GetComponent<Text>().text =$"{SaveData.StoryClearStar(story)}";
+            string tempString = "???"; 
+            if (story.introVariables.ContainsKey("CHARACTER"))
+                tempString =(string)story.introVariables["CHARACTER"];
+            button.transform.GetChild(4).GetComponent<Text>().text =$"{tempString}";
             button.GetComponent<Button>().onClick.AddListener(() =>
             {
                 foreach(var otherButton in buttonList) //다른 버튼 사이즈는 그대로 바꾸기

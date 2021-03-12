@@ -136,7 +136,7 @@
       }
     },
     {
-      "text": "샘플 스토리 인트로",
+      "text": "(set: $CHARACTER to \"희진\")샘플 스토리 인트로",
       "name": "의뢰서",
       "pid": "8",
       "position": {

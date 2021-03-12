@@ -11,6 +11,7 @@ public class ResultPanelController : MonoBehaviour
     RectTransform rectTransform;
     Text episodeName;
     Text clearText;
+    Text characterText;
     bool firstStart =true;
     // Start is called before the first frame update
     void Start()
@@ -18,6 +19,7 @@ public class ResultPanelController : MonoBehaviour
         resultPanel = GameObject.Find("ResultPanel").gameObject;
         episodeName = GameObject.Find("ResultPanel/EpisodeName").GetComponent<Text>();
         clearText = GameObject.Find("ResultPanel/ClearText").GetComponent<Text>();
+        characterText = GameObject.Find("ResultPanel/CharacterText").GetComponent<Text>();
         resultButton = GameObject.Find("ResultPanel/ResultButton").GetComponent<Button>();
         resultButton.onClick.AddListener(OnClickResultButton);
         for (int i = 0; i < 3; i++)
@@ -50,6 +52,8 @@ public class ResultPanelController : MonoBehaviour
         {
             ResultStar(StoryPlayer.CurrentStar);
             episodeName.text ="Ep."+ StoryPlayer.CurrentStory.name;
+            if(StoryPlayer.CurrentStory.introVariables.ContainsKey("CHARACTER"))
+                characterText.text = (string)StoryPlayer.CurrentStory.introVariables["CHARACTER"];
             bool clear;
             if (0 < StoryPlayer.CurrentStar)
             {
@@ -62,6 +66,7 @@ public class ResultPanelController : MonoBehaviour
                 clearText.text = "의뢰 실패...";
             }
             SaveData.Instance.AddClearStory(StoryPlayer.CurrentStory.name, clear, StoryPlayer.CurrentStar);
+
         }
     }
     // Update is called once per frame
