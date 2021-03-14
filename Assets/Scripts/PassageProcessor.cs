@@ -1,7 +1,8 @@
 using System;
-using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -54,6 +55,45 @@ public class PassageProcessor
             var value = table.Compute(processedExpression, string.Empty);
             return table.Compute(processedExpression, string.Empty);
         }
+    }
+
+    private bool EvalCondition(string condition)
+    {
+        Regex isNotRegex = new Regex(@"(?<exp1>.+) is not (?<exp2>.+)");
+        Match isNotMatch = isNotRegex.Match(condition);
+        if(isNotMatch.Success)
+        {
+            GroupCollection groups = isNotMatch.Groups;
+            var exp1 = Eval(groups["exp1"].Value);
+            var exp2 = Eval(groups["exp2"].Value);
+            return exp1 != exp2;
+        }
+
+        Regex isRegex = new Regex(@"(?<exp1>.+) is (?<exp2>.+)");
+        Match isMatch = isRegex.Match(condition);
+        if(isMatch.Success)
+        {
+            GroupCollection groups = isMatch.Groups;
+            var exp1 = Eval(groups["exp1"].Value);
+            var exp2 = Eval(groups["exp2"].Value);
+            return exp1 == exp2;
+        }
+
+        return (bool)Eval(condition);
+    }
+
+    private string ProcessIfMacro(string originText)
+    {
+        Regex rx = new Regex(@"\(if:\s*(?<condition>.+?)\)\[(?<body>.+?)\]");
+        MatchCollection matches = rx.Matches(originText);
+        foreach (Match match in matches)
+        {
+            GroupCollection groups = match.Groups;
+            bool contidion = EvalCondition(groups["condition"].Value);
+            if (contidion) {}
+        }
+        string setRemovedText = rx.Replace(originText, "").Trim();
+        return setRemovedText;
     }
 
     private string ProcessSetMacro(string originText)
