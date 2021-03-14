@@ -35,14 +35,14 @@ public class Token
 
     public override string ToString()
     {
-        if (this.contents == null)
-            return $"T({this.type.ToString()}, \"{Regex.Escape(this.content)}\")";
+        if (contents == null)
+            return $"T({type.ToString()}, \"{Regex.Escape(content)}\")";
         else
         {
             List<string> stringContents = new List<string>();
-            foreach (var token in this.contents)
+            foreach (var token in contents)
                 stringContents.Add(token.ToString());
-            return $"T({this.type.ToString()}, [\n{String.Join("\n", stringContents)}\n])";
+            return $"T({type.ToString()}, [\n{String.Join("\n", stringContents)}\n])";
         }
     }
 }
@@ -130,6 +130,10 @@ public class PassageLexer
                             string symbol = match.Groups["symbol"].Value;
                             yield return new Token(tokenDef.type, symbol);
                             break;
+                        // case TokenType.String:
+                        //     string value = match.Groups["value"].Value;
+                        //     yield return new Token(tokenDef.type, value);
+                        //     break;
                         default:
                             yield return new Token(tokenDef.type, match.Value);
                             break;
