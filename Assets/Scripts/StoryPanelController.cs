@@ -9,12 +9,14 @@ public class StoryPanelController : MonoBehaviour
 {
     Text storyText;
     Button backButton;
-    bool checkSkipTyping = false;
-    public bool endTyping = false;
+    GameObject selectPanel;
+    public bool EndTyping { get ; set; }
+    private bool CheckSkipTyping { get; set; }
     void Start()
     {
         storyText = GameObject.Find("StoryText").GetComponent<Text>();
         backButton = GameObject.Find("Canvas/BackButton").GetComponent<Button>();
+        selectPanel = GameObject.Find("Canvas/VertialLayout/SelectPanel");
         backButton.onClick.AddListener(OnClickBackButton);
         
         if (StoryPlayer.isReady)
@@ -31,9 +33,9 @@ public class StoryPanelController : MonoBehaviour
             EventSystem.current.RaycastAll(pointerEventData, raycastResults);
             foreach(var result in raycastResults)
             {
-               if( result.gameObject == this.gameObject)
+                if ((result.gameObject == this.gameObject)||(result.gameObject == selectPanel))
                 {
-                    checkSkipTyping = true;
+                    CheckSkipTyping = true;
                 }
             }
         }
@@ -46,6 +48,7 @@ public class StoryPanelController : MonoBehaviour
 
     public void OnPassageUpdated()
     {
+        CheckSkipTyping = false;
         var temp = TypeCoroutine(storyText, StoryPlayer.CurrentPassage.text);
         StartCoroutine(temp);
     }
@@ -53,19 +56,19 @@ public class StoryPanelController : MonoBehaviour
     {
         for (int i = 0; i < description.Length; i++)
         {
-            if (!checkSkipTyping)
+            if (!CheckSkipTyping)
             {
                 text.text = description.Substring(0, i);
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.05f);
             }
             else
             {
                 text.text = description;
-                endTyping = true;
-                checkSkipTyping = false;
+                EndTyping = true;
+                CheckSkipTyping = false;
                 yield break;
             }
         }
-        endTyping = true;
+        EndTyping = true;
     }
 }
