@@ -25,11 +25,11 @@ public class SelectPanelController : MonoBehaviour
  
     IEnumerator OnPassageUpdatedCoroutine(Passage passage)
     {
-        while (!storyPanel.endTyping)
+        while (!storyPanel.EndTyping)
         {
             yield return null;
         }
-        storyPanel.endTyping = false;
+        storyPanel.EndTyping = false;
         if (passage.isEnd) //해당 페이지가 끝인 경우
         {
             GameObject button = Instantiate(ButtonPrefab, ButtonHolder.transform);
