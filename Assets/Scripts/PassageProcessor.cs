@@ -1,7 +1,8 @@
 using System;
-using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ public class PassageProcessor
         variables = initialVariables;
     }
 
-    private object ParseType(string symbol)
+    private object Parse(string symbol)
     {        
         Match stringMatch = stringRegex.Match(symbol);
         if(stringMatch.Success)
@@ -41,58 +42,96 @@ public class PassageProcessor
         throw new NotImplementedException($"Invalid variable value: {symbol}");
     }
 
-    private object Eval(string expression)
+    private string GetExpression(Token token)
     {
-        if (stringRegex.IsMatch(expression))
+        switch (token.type)
         {
-            return ParseType(expression);
+            case TokenType.Symbol:
+                object value = variables[token.content];
+                if (value is string)
+                    return $"'{value}'";
+                else
+                    return value.ToString();
+            case TokenType.Value:
+                return Eval(token.contents).ToString();
+            case TokenType.String:
+                return $"'{Parse(token.content)}'";
+            case TokenType.IsNot:
+                return "<>";
+            case TokenType.Is:
+                return "=";
+            default:
+                return token.content;
+        }
+    }
+
+    private object Eval(List<Token> tokens)
+    {
+        if (tokens.Count <= 1)
+        {
+            return Parse(tokens[0].content);
         }
         else
         {
-            var processedExpression = ProcessVariable(expression);
-            System.Data.DataTable table = new System.Data.DataTable();
-            var value = table.Compute(processedExpression, string.Empty);
-            return table.Compute(processedExpression, string.Empty);
+            List<string> expressions = new List<string>();
+            foreach (var token in tokens)
+                expressions.Add(GetExpression(token));
+            string expression = String.Join(" ", expressions);
+            
+            var table = new System.Data.DataTable();
+            try
+            {
+                var value = table.Compute(expression, string.Empty);
+                return value;
+            }
+            catch (SyntaxErrorException e)
+            {
+                Debug.Log($"-- expression: {expression}");
+                throw e;
+            }   
         }
     }
 
-    private string ProcessSetMacro(string originText)
+    private string ProcessTokens(IEnumerable<Token> tokens)
     {
-        Regex rx = new Regex(@"\(set:\s*\$(?<key>[a-zA-Z0-9_-]+) to (?<value>.+?)\)");
-        MatchCollection matches = rx.Matches(originText);
-        foreach (Match match in matches)
+        bool lastIf = false;
+        StringBuilder result = new StringBuilder();
+        foreach (var token in tokens)
         {
-            GroupCollection groups = match.Groups;
-            variables[groups["key"].Value] = Eval(groups["value"].Value);
+            switch (token.type)
+            {
+                case TokenType.Set:
+                    string setSymbol = token.contents[0].content; 
+                    object setValue = Eval(token.contents[1].contents);
+                    variables[setSymbol] = setValue;
+                    break;
+                case TokenType.If:
+                    bool ifCondition = (bool)Eval(token.contents[0].contents);
+                    if (ifCondition)
+                        result.Append(ProcessTokens(token.contents[1].contents));
+                    lastIf = ifCondition;
+                    break;
+                case TokenType.ElseIf:
+                    if (lastIf) continue;
+                    bool elseIfCondition = (bool)Eval(token.contents[0].contents);
+                    if (elseIfCondition)
+                        result.Append(ProcessTokens(token.contents[1].contents));
+                    lastIf = elseIfCondition;
+                    break;
+                case TokenType.Else:
+                    if (lastIf) continue;
+                    result.Append(ProcessTokens(token.contents[0].contents));
+                    lastIf = false;
+                    break;
+                case TokenType.Symbol:
+                    result.Append(variables[token.content].ToString());
+                    break;
+                default:
+                    result.Append(token.content);
+                    break;
+            }
         }
-        // For debuging
-        foreach (var kv in variables)
-        {
-            Debug.Log($"{kv.Key}: {kv.Value} ({kv.Value.GetType()})");
-        }
-        string setRemovedText = rx.Replace(originText, "").Trim();
-        return setRemovedText;
-    }
-
-    private string ProcessVariable(string originText)
-    {
-        Regex rx = new Regex(@"\$(?<varname>[a-zA-Z0-9_-]+)");
-        MatchCollection matches = rx.Matches(originText);
-        string varReplacedText = originText;
-        foreach (Match match in matches)
-        {
-            GroupCollection groups = match.Groups;
-            var varname = groups["varname"].Value;
-            varReplacedText = varReplacedText.Replace($"${varname}", variables[varname].ToString());
-        }
-        return varReplacedText;
-    }
-
-    private string ProcessPassageText(string rawText)
-    {
-        string setRemovedText = ProcessSetMacro(rawText);
-        string varReplacedText = ProcessVariable(setRemovedText);
-        return varReplacedText;
+        return result.ToString();
     }
 
     public static PassageProcessor Process(Passage passage, Dictionary<string, object> initialVariables)
@@ -100,8 +139,11 @@ public class PassageProcessor
         var processor = new PassageProcessor(initialVariables);
         processor.passage.pid = passage.pid;
         processor.passage.name = passage.name;
-        processor.passage.text = processor.ProcessPassageText(passage.text);
+        
+        var tokens = PassageLexer.Tokenize(passage.text);
+        processor.passage.text = processor.ProcessTokens(tokens);
         processor.passage.links = passage.links; // TODO: process links
+
         return processor;
     }
 }
