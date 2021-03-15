@@ -130,10 +130,6 @@ public class PassageLexer
                             string symbol = match.Groups["symbol"].Value;
                             yield return new Token(tokenDef.type, symbol);
                             break;
-                        // case TokenType.String:
-                        //     string value = match.Groups["value"].Value;
-                        //     yield return new Token(tokenDef.type, value);
-                        //     break;
                         default:
                             yield return new Token(tokenDef.type, match.Value);
                             break;
